@@ -21,7 +21,7 @@ pipeline {
                 sh "rm -rf Petclinic-application-Pipeline"
                 sh "git clone https://github.com/devopsachin/Petclinic-application-Pipeline.git"
                
-                sh "sudo docker build -f 3mmmm123/myname:$BUILD_NUMBER Petclinic-application-Pipeline/Dockerfile"
+                sh "sudo docker build -f 3mmmm123/myname:$BUILD_NUMBER Petclinic-application-Pipeline"
                 
             }
         }
