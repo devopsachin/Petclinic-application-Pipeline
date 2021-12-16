@@ -30,8 +30,8 @@ pipeline {
         }        
             stage ('Pushing Image into Docker regestry'){
                 steps{
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                    sh "docker push 3mmmm123/myname:$BUILD_NUMBER"
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh "sudo docker push 3mmmm123/myname:$BUILD_NUMBER"
                 }
             }
                     stage ('Deplyoing in applicaton Server'){
