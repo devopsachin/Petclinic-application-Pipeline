@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Cloning Repo') {
             steps {
-               //sh  "git clone https://github.com/spring-projects/spring-petclinic.git"
+               sh  "git clone https://github.com/spring-projects/spring-petclinic.git"
                dir ('spring-petclinic'){
                    sh "pwd"
                }
