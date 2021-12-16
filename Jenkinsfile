@@ -21,7 +21,7 @@ pipeline {
                 
                 sh "git clone https://github.com/devopsachin/Petclinic-application-Pipeline.git"
                 dir ('Petclinic-application-Pipeline'){
-                sh "docker build -t 3mmmm123/myname:$BUILD_NUMBER ."
+                sh "sudo docker build -t 3mmmm123/myname:$BUILD_NUMBER ."
                 }
             }
         }
