@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Cloning Repo') {
             steps {
-               //sh  "git clone https://github.com/spring-projects/spring-petclinic.git"
+               //sh  "git pull https://github.com/spring-projects/spring-petclinic.git"
                dir ('spring-petclinic'){
                    sh "pwd"
                }
@@ -19,7 +19,7 @@ pipeline {
         stage ('Building a container'){
             steps{
                 
-                sh "git clone https://github.com/devopsachin/Petclinic-application-Pipeline.git"
+                sh "git pull https://github.com/devopsachin/Petclinic-application-Pipeline.git"
                 dir ('Petclinic-application-Pipeline'){
                 sh "sudo docker build -t 3mmmm123/myname:$BUILD_NUMBER ."
                 }
