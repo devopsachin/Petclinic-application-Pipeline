@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+	}
     stages {
         stage('Cloning Repo') {
             steps {
@@ -24,9 +27,10 @@ pipeline {
                 sh "sudo docker build -f Petclinic-application-Pipeline/Dockerfile -t 3mmmm123/myname:$BUILD_NUMBER ."
                 
             }
-        }
+        }        
             stage ('Pushing Image into Docker regestry'){
                 steps{
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                     sh "docker push 3mmmm123/myname:$BUILD_NUMBER"
                 }
             }
