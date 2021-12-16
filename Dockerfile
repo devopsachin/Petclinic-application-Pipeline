@@ -1,5 +1,5 @@
 From Ubuntu
-export DEBIAN_FRONTEND=noninteractive
+ENV export DEBIAN_FRONTEND=noninteractive
 RUN apt-get install openjdk-11-jdk -y 
 COPY spring-petclinic spring-petclinic/
 WORKDIR spring-petclinic
