@@ -36,16 +36,9 @@ pipeline {
                     sh "sudo docker push 3mmmm123/myname:$BUILD_NUMBER"
                 }
             }
-	def remote = [:]
-    	remote.name = 'Docker'
-    	remote.host = 'ec2-13-235-23-76.ap-south-1.compute.amazonaws.com'
-    	remote.user = 'jenkins'
-    	remote.password = 'jenkins'
-    	remote.allowAnyHosts = true
+	
              stage ('Deplyoing in applicaton Server'){
-		   shCommand remote, command: "docker pull 3mmmm123/myname:$BUILD_NUMBER"
-		   sshCommand remote, command: "docker run -it 3mmmm123/myname:$BUILD_NUMBER"
-                    //sh "ssh ubuntu@13.235.23.76 docker pull 3mmmm123/myname:$BUILD_NUMBER"
+		     sh "ssh jenkins@172.31.33.108 docker pull 3mmmm123/myname:$BUILD_NUMBER"
                     //sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
 
                     }
