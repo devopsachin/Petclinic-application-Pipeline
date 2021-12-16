@@ -25,18 +25,15 @@ pipeline {
                 
             }
         }
-            stage ('Running Java Application'){
+            stage ('Pushing Image into Docker regestry'){
                 steps{
-                    dir ('spring-petclinic'){
-                    sh "sudo nohup java -jar target/*.jar --server.port=8083 &"  
-                    sh "sleep 15"
-                    }
+                    sh "docker push 3mmmm123/myname:$BUILD_NUMBER"
                 }
             }
-                    stage ('Validating'){
+                    stage ('Deplyoing in applicaton Server'){
                         steps {
-                        //get api response and pring of its 200 and send mail
-                        sh "sudo ss -tulpn | grep LISTEN"
+                            sh "ssh ubuntu@13.235.23.76 docker pull 3mmmm123/myname:$BUILD_NUMBER"
+                            sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
                     }
                     }
     }
