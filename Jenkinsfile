@@ -3,6 +3,13 @@ pipeline {
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
 	}
+    def remote = [13.235.23.76]
+    remote.name = 'Docker'
+    remote.host = ec2-13-235-23-76.ap-south-1.compute.amazonaws.com
+    remote.user = 'jenkins'
+    remote.password = 'jenkins'
+    remote.allowAnyHosts = true
+    
     stages {
         stage('Cloning Repo') {
             steps {
@@ -34,10 +41,12 @@ pipeline {
                     sh "sudo docker push 3mmmm123/myname:$BUILD_NUMBER"
                 }
             }
-                    stage ('Deplyoing in applicaton Server'){
-                        steps {
-                            sh "ssh ubuntu@13.235.23.76 docker pull 3mmmm123/myname:$BUILD_NUMBER"
-                            sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
+             stage ('Deplyoing in applicaton Server'){
+                steps {
+		    sshCommand remote, command: "docker pull 3mmmm123/myname:$BUILD_NUMBER"
+		    sshCommand remote, command: "docker run -it 3mmmm123/myname:$BUILD_NUMBER"
+                    //sh "ssh ubuntu@13.235.23.76 docker pull 3mmmm123/myname:$BUILD_NUMBER"
+                    //sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
                     }
                     }
     }
