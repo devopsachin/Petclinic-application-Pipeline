@@ -19,7 +19,7 @@ pipeline {
         stage ('Building a container'){
             steps{
                 sh "rm -rf Petclinic-application-Pipeline"
-                sh "git pull https://github.com/devopsachin/Petclinic-application-Pipeline.git"
+                sh "git clone https://github.com/devopsachin/Petclinic-application-Pipeline.git"
                 dir ('Petclinic-application-Pipeline'){
                 sh "sudo docker build -t 3mmmm123/myname:$BUILD_NUMBER ."
                 }
