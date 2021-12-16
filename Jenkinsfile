@@ -3,7 +3,7 @@ pipeline {
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
 	}
-    def remote = [13.235.23.76]
+    def remote = [:]
     remote.name = 'Docker'
     remote.host = ec2-13-235-23-76.ap-south-1.compute.amazonaws.com
     remote.user = 'jenkins'
