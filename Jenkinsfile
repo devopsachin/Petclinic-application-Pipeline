@@ -20,9 +20,9 @@ pipeline {
             steps{
                 sh "rm -rf Petclinic-application-Pipeline"
                 sh "git clone https://github.com/devopsachin/Petclinic-application-Pipeline.git"
-                dir ('Petclinic-application-Pipeline'){
-                sh "sudo docker build -t 3mmmm123/myname:$BUILD_NUMBER ."
-                }
+               
+                sh "sudo docker build -f 3mmmm123/myname:$BUILD_NUMBER Petclinic-application-Pipeline/Dockerfile"
+                
             }
         }
             stage ('Running Java Application'){
