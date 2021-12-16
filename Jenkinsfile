@@ -3,7 +3,6 @@ pipeline {
     stages {
         stage('Cloning Repo') {
             steps {
-                git 
                sh  "git clone https://github.com/spring-projects/spring-petclinic.git"
                dir ('spring-petclinic'){
                    sh "pwd"
@@ -17,6 +16,13 @@ pipeline {
                     }
                 }
             }
+        stage ('Building a container'){
+            steps{
+                git https://github.com/devopsachin/Petclinic-application-Pipeline.git
+                sh "docker build -t 3mmmm123/myname:$BUILD_NUMBER ."
+     
+            }
+        }
             stage ('Running Java Application'){
                 steps{
                     dir ('spring-petclinic'){
