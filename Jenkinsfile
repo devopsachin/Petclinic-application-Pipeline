@@ -43,7 +43,8 @@ pipeline {
 			sshagent (credentials: ['ssh-key']) {
    	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com uptime'
 		           sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com'
-			   sh "sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+			   sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+			   
 			   sh "sduo docker pull 3mmmm123/myname:$BUILD_NUMBER"
 			   sh "sudo docker run -it 3mmmm123/myname:$BUILD_NUMBER"
                    		}
