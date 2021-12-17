@@ -41,8 +41,8 @@ pipeline {
              stage ('Deplyoing in applicaton Server'){
 		     steps{
 			sshagent (credentials: ['ssh-key']) {
-   	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com uptime'
-		           sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com'
+   	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com'
+		           sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo su -'
 			   sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 			   
 			   sh "sudo docker pull 3mmmm123/myname:$BUILD_NUMBER"
