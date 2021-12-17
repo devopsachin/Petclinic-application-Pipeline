@@ -42,11 +42,10 @@ pipeline {
 		     steps{
 			sshagent (credentials: ['ssh-key']) {
    	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com uptime'
-// docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-			   sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com'
-// docker pull 3mmmm123/myname:$BUILD_NUMBER'
-			sh 'sudo docker'
-			   sh  'docker run -it 3mmmm123/myname:$BUILD_NUMBER'
+		           sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com'
+			   sh "sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"
+			   sh "sduo docker pull 3mmmm123/myname:$BUILD_NUMBER"
+			   sh "sudo docker run -it 3mmmm123/myname:$BUILD_NUMBER"
                    		}
 		     }
                     
