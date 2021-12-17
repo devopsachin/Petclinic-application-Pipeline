@@ -6,8 +6,10 @@ pipeline {
 
   
   stages {
-        stage('Cloning Repo') {
+        stage('Pulling Code form repo') {
             steps {
+		git credentialsId: 'github-creds', branch: 'main', pull: 'true',
+		url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
                //sh  "git pull https://github.com/spring-projects/spring-petclinic.git"
                dir ('spring-petclinic'){
                    sh "pwd"
