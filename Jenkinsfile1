@@ -2,9 +2,10 @@ pipeline{
   agent any 
   stages{
     stage ('clonign repo'){
+        steps{
       git credentialsId: 'github-creds',
           url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
-          
+          }
           }
   }
   }
