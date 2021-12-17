@@ -46,7 +46,7 @@ pipeline {
 			   sh 'echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 			   
 			   sh "sudo docker pull 3mmmm123/myname:$BUILD_NUMBER"
-			   sh "sudo docker run -it 3mmmm123/myname:$BUILD_NUMBER"
+			   sh "sudo docker run -it -d 3mmmm123/myname:$BUILD_NUMBER"
                    		}
 		     }
                     
