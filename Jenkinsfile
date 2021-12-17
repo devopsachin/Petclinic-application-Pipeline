@@ -49,7 +49,7 @@ pipeline {
                     
     }   
 }
-}
+
 
      post {
            failure{
@@ -63,3 +63,4 @@ pipeline {
                         to: "sachinur94@gmail.com"
                     }
                 }
+}
