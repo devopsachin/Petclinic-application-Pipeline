@@ -3,8 +3,8 @@ pipeline{
   stages{
     stage ('clonign repo'){
         steps{
-      git credentialsId: 'github-creds',
-      git branch: 'main'
+      git credentialsId: 'github-creds', branch: 'main',
+      
           url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
           }
           }
