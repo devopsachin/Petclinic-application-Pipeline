@@ -39,7 +39,7 @@ pipeline {
 	
              stage ('Deplyoing in applicaton Server'){
 		     steps{
-			     sshagent(credentials('ssh-key')){
+			     sshagent('ssh-key'){
 		     sh "ssh -o StrictHostKeyChecking=no ubuntu@65.2.29.251 docker pull 3mmmm123/myname:$BUILD_NUMBER"
                     //sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
 		     }
