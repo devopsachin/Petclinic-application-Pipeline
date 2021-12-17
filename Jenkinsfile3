@@ -2,7 +2,7 @@ pipeline{
     agent any 
     stages{
         stage('Recording artifact'){
-            step{
+            steps{
               archiveArtifacts artifacts: 'Jenkinsfile', fingerprint: true  
             }
         }
