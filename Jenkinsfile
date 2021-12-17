@@ -10,9 +10,8 @@ pipeline {
             steps {
 		git credentialsId: 'github-creds', branch: 'main',
 		url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
-               //sh  "git pull https://github.com/spring-projects/spring-petclinic.git"
-               dir ('spring-petclinic'){
-                   sh "pwd"
+                dir ('spring-petclinic'){
+                 	sh "pwd"
                }
             }
         } 
@@ -26,9 +25,8 @@ pipeline {
             } 
         stage ('Building a container'){
             steps{
-                sh "rm -rf Petclinic-application-Pipeline"
-                sh "git clone https://github.com/devopsachin/Petclinic-application-Pipeline.git"
-               
+                git credentialsId: 'github-creds', branch: 'main',
+                url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
                 sh "sudo docker build -f Petclinic-application-Pipeline/Dockerfile -t 3mmmm123/myname:$BUILD_NUMBER ."
                 
             }
