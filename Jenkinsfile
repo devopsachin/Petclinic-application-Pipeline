@@ -41,7 +41,7 @@ pipeline {
              stage ('Deplyoing in applicaton Server'){
 		     steps{
 			sshagent (credentials: ['ssh-key']) {
-   	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-65-2-29-251.ap-south-1.compute.amazonaws.com uptime'
+   	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com uptime'
                    		}
 		     }
                     
