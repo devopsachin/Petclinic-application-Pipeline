@@ -14,7 +14,7 @@ pipeline {
                }
             }
         } 
-  }
+  
             stage('Building Code and testing'){
                 steps{
                     dir ('spring-petclinic'){
@@ -47,6 +47,7 @@ pipeline {
 		     }
                     }
     }   
+}
 
                 post {
                     failure{
