@@ -3,12 +3,8 @@ pipeline {
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
 	}
- node {
-  sshagent (credentials: ['ssh-key']) {
-    sh 'ssh -o StrictHostKeyChecking=no -l ubuntu 65.2.29.251 uname -a'
-  }
-}   
-    
+
+  
   stages {
         stage('Cloning Repo') {
             steps {
