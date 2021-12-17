@@ -5,7 +5,7 @@ pipeline {
 	}
     
     
-    stages {
+ /*   stages {
         stage('Cloning Repo') {
             steps {
                //sh  "git pull https://github.com/spring-projects/spring-petclinic.git"
@@ -13,14 +13,14 @@ pipeline {
                    sh "pwd"
                }
             }
-        }
+        } 
             stage('Building Code and testing'){
                 steps{
                     dir ('spring-petclinic'){
                         sh "./mvnw package"
                     }
                 }
-            }
+            } */
         stage ('Building a container'){
             steps{
                 sh "rm -rf Petclinic-application-Pipeline"
@@ -39,7 +39,7 @@ pipeline {
 	
              stage ('Deplyoing in applicaton Server'){
 		     steps{
-			     sshagent(credentials : ['ssh-key']){
+			     sshagent(credentials('ssh-key')){
 		     sh "ssh -o StrictHostKeyChecking=no ubuntu@65.2.29.251 docker pull 3mmmm123/myname:$BUILD_NUMBER"
                     //sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
 		     }
