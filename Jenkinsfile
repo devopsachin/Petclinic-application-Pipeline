@@ -41,8 +41,8 @@ pipeline {
              stage ('Deplyoing in applicaton Server'){
 		     steps{
 			sshagent (credentials: ['ssh-key']) {
-   	  		   sh "ssh -o StrictHostKeyChecking=no ubuntu@65.2.29.251 docker pull 3mmmm123/myname:$BUILD_NUMBER"
-                   		     }
+   	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-65-2-29-251.ap-south-1.compute.amazonaws.com uptime'
+                   		}
 		     }
                     
     }   
