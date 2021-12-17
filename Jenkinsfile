@@ -5,7 +5,7 @@ pipeline {
 	}
     
     
- /*   stages {
+  stages {
         stage('Cloning Repo') {
             steps {
                //sh  "git pull https://github.com/spring-projects/spring-petclinic.git"
@@ -14,13 +14,14 @@ pipeline {
                }
             }
         } 
+  }
             stage('Building Code and testing'){
                 steps{
                     dir ('spring-petclinic'){
                         sh "./mvnw package"
                     }
                 }
-            } */
+            } 
         stage ('Building a container'){
             steps{
                 sh "rm -rf Petclinic-application-Pipeline"
@@ -46,7 +47,7 @@ pipeline {
 		     }
                     }
     }   
-    }
+
                 post {
                     failure{
                         mail body: " App Deployment failed ${env.BUILD_URL}/console",
