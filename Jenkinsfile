@@ -45,7 +45,7 @@ pipeline {
                     //sh "ssh ubuntu@13.235.23.76 docker run -it 3mmmm123/myname:$BUILD_NUMBER"
 		     }
 		     }
-                    }
+                    
     }   
 }
 
