@@ -1,0 +1,380 @@
+// Jenkins declarative pipeline syntax https://jenkins.io/doc/book/pipeline/syntax/
+pipeline {
+
+	agent {
+		node {
+			label 'saga-workbench && docker && agent_version_v2'
+		}
+	}
+
+	parameters {
+		booleanParam(name: 'PERFORM_RELEASE', defaultValue: false, description: "Performs release setting release version number, publish release artifacts and tags version.")
+		string (name: 'NEXT_DEVELOPMENT_VERSION_NUMBER', defaultValue: '', description: "Input next development version as MAJOR.MINOR.PATCH.")
+	}
+
+	options {
+		// using the Timestamper plugin we can add timestamps to the console log
+		timestamps()
+		// disable resume pipeline when master restart - it will not work with all the containers running
+		disableResume()
+	}
+
+	environment {
+		// set specific version of our SAGA solution image we build so we ensure exactly that image version is tested later
+		SAGA_SOLUTION_IMAGE_NAME = "incubator-solution"
+		DEFAULT_CONFIG_EXAMPLE_TO_TEST = "default"
+		SEEDING_CONFIG_EXAMPLE = "seeder"
+		SAGA_SOLUTION_PROBE_IMAGE_NAME = "saga-probe"
+		OTHER_CONFIG_EXAMPLES_TO_TEST = "big small-customers-or-dev"
+		BUILD_IDENTIFIER = env.BRANCH_NAME.replaceAll("[^a-zA-Z0-9\\.\\_]", "-").toLowerCase()
+		// Docker Compose set a label on all the resources it creates based on the project name, but instead of using the default which is
+		// directory path, we will set it explicitly with -p PROJECTNAME to avoid Jenkins making incompatible directory names
+		// for the build workspace. Notice to ensure clean-up, this should be unique only on per branch pattern, not per build.
+		DOCKER_COMPOSE_PROJECT_NAME = "${BUILD_IDENTIFIER}"
+		SAGA_SOLUTION_CONTAINER_LABEL = "com.persequor.product=incubator-solution"
+		// Other repeated hard-coded values we want to set once and also expose if scripts need them
+		MVN_BUILD_DOCKER_IMAGE_VERSION = "maven:3-jdk-8"
+		MVN_VERSIONS_FULL_NAME="org.codehaus.mojo:versions-maven-plugin:2.7"
+	}
+
+	stages {
+		stage("ensure version") {
+			stages {
+				stage("check version") {
+					// Read version from pom file, but not the one for saga-workbench which we don't use, but the one that determines
+					// the version of SAGA core we depend on
+					// It must contains SNAPSHOT, to be able repeatably run builds after a release
+					// Also prepare the build identifier ensuring branch is always part of version for non-releases
+					// Base version - without SNAPSHOT - is used as base to later re-add build-identifier + -SNAPSHOT if non-release
+					steps {
+						script {
+							pom = readMavenPom file: 'pom.xml'
+							env.SAGA_VERSION = pom.properties.'saga-version'
+							// Find base versions without build identifier and SNAPSHOT string
+							// pom may contain for example version strings like '20200717.0.0-develop-SNAPSHOT' or '20200717.0.0-SNAPSHOT'
+							env.SAGA_VERSION_BASE = env.SAGA_VERSION.replaceFirst(/[^\d+(\.\d+){2,}]([\w\d\.\-]+|['-SNAPSHOT'])/, "") // also work for <version>-maint-20200619.0.1-SNAPSHOT and <version>-SNAPSHOT
+							// saga workbench version, which we use for the release package, have the same version as the SAGA core we depend on
+							// yes - it is not possible to just release workbench stuff without new SAGA core
+							// Also the name we use for release package is the name of the project, not artifact id
+							env.SAGA_WORKBENCH_VERSION_BASE = env.SAGA_VERSION_BASE
+							env.ARTIFACT_NAME = pom.name
+						}
+						echo 'Find the expected release version of SAGA Workbench project, based on SAGA core version we depend on.'
+						sh '''echo "SAGA Workbench project depend on SAGA core version: $SAGA_VERSION (base version: $SAGA_VERSION_BASE)"'''
+						sh '''echo "SAGA Workbench project will then be released in same version as SAGA core (when releasing): $SAGA_WORKBENCH_VERSION_BASE"'''
+						// FIXME this could be a library function we could write unit tests for
+						sh '''echo $SAGA_VERSION  | grep -q -i -E "(-SNAPSHOT)[\\+]?" || (echo "ERROR: SAGA Workbench must depend on a SAGA core SNAPSHOT version always - release build fixes it." && false)'''
+						sh 'env'
+					}
+				} // end check version stage
+				stage("set release version"){
+					when { expression { return params.PERFORM_RELEASE } }
+					steps {
+						withDockerContainer(args: '-v $HOME/.m2:/var/maven/.m2 -v ${WORKSPACE}:/usr/src/mymaven -w /usr/src/mymaven -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven', image: env.MVN_BUILD_DOCKER_IMAGE_VERSION) {
+							// We want to use the Maven Maven plugin 'versions' that can replace our dependencies with SNAPSHOT version, with a corresponding released version.identifier
+							// It will ask relevant Maven repositories about if there is a release of such snapshots, which there should be in our cases since projects we depend on
+							// already should be released
+							// We could have replaced version manually, but then Maven would check if the released versions exists
+							// There is just this slight problem it doesn't work and find the released artifacts, as our version numbers contain an build identifier:
+							// version numbers <major.minor.patch>-<build identifier>-SNAPSHOT
+							// To circumvent this, we temporarily replace the version with just <major.minor.patch>-SNAPSHOT and let the plugin do it works.
+							// NOTICE that the version we're interested in is, 'saga-version' which is in a property, so we use the properties goals.
+							sh 'mvn $MVN_VERSIONS_FULL_NAME:set-property -Dproperty=saga-version -DnewVersion=$SAGA_VERSION_BASE-SNAPSHOT'
+							// Now find releases of our SNAPSHOT dependencies and replace their version with he released one (basically remove -SNAPSHOT from version string)
+							//Notice we don't allow any update to the version numbers, so basically just remove SNAPSHOT.
+							sh '''mvn -U $MVN_VERSIONS_FULL_NAME:update-properties -DexcludeProperties=saga-solution-version -Dmaven.version.rules.serverId=ftp-partner-mvn-repository -DallowMajorUpdates=false -DallowMinorUpdates=false -DallowIncrementalUpdates=false'''
+							// FIXME - it is downloading from Artifactory... not partner portal! enforce it to use partner portal doesn't work either
+							// Now check we got a version
+							script {
+								pom = readMavenPom file: 'pom.xml'
+								env.VERSION_CONTAINS_SNAPSHOT = pom.properties.'saga-version'.contains("SNAPSHOT")
+								echo "Version still contains snapshot?: ${env.VERSION_CONTAINS_SNAPSHOT}"
+								if (env.VERSION_CONTAINS_SNAPSHOT.toBoolean()) { error("Set release version failed! Didn't find releases of ${env.SAGA_VERSION} for SAGA core dependencies. I looked for release with the property ${env.SAGA_VERSION_BASE}-SNAPSHOT as I removed the build identifier. Is SAGA core released in version ${env.SAGA_VERSION_BASE}")  }
+							}
+							withCredentials([usernamePassword(credentialsId: env.CI_GLOBAL_ENV_CREDENTIAL_ID_NAME_CI_GITHUB_PERSONAL_ACCESS_TOKEN_SCOPE_REPO__V1, passwordVariable: 'GIT_PERSONAL_ACCESS_TOKEN', usernameVariable: 'GIT_USERNAME')]) {
+								sh('''
+										git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PERSONAL_ACCESS_TOKEN; }; f"
+										git status
+										git remote -v show
+										git diff pom.xml
+										git add pom.xml
+										git commit -m "Locked SAGA core dependency version for release"
+										git log -n2
+								''')
+							}
+						}
+					}
+				} // end set release version
+			}
+		} // end ensure version stage
+		stage("create release package") {
+			// we always to that so we know the script works and we want to create the package before building to avoid
+			// picking up build cruft and left-overs.
+			// But is IMPORTANT that is comes after editing pom and version files, so the right ones are included in release package.
+			steps {
+				// clean git repo removing cruft to avoid adding it to release package in case exclude list is not complete
+				// and to avoid the create release package script fails on checking if workspace is really clean.
+				// At this point, changed poms and versions etc. should have been comitted.
+				sh 'git clean -fdx'
+				sh './.ci/create_saga_release_package.sh'
+				sh 'echo "Show first 10 lines content of release package..." && tar tvf workbench.tgz | tail -n 10'
+				script {
+					if (params.PERFORM_RELEASE) {
+						env.ARTIFACT_QA="REL"
+					}
+					else {
+						env.ARTIFACT_QA="DEV"
+					}
+					// reread version, as it is either changed to release or build identifier is added
+					pom = readMavenPom file: 'pom.xml'
+					env.ARTIFACT_VERSION = pom.properties.'saga-version'
+				}
+				// create folder structure that our Partner Portal expects
+				// FIXME - here is hard dependency on partner portal, that will break in the future and make maintenance releases annoying...
+				// - the requirement from partner portal that they version are in their own 'workbench-<version>'dir might change!
+				sh 'mkdir -p workbench-$ARTIFACT_VERSION'
+				sh 'cp -vf workbench.tgz workbench-$ARTIFACT_VERSION/'
+				stash includes: "workbench-${env.ARTIFACT_VERSION}/**", name: 'releasepackage', useDefaultExcludes: false
+				// also set nice build number in Jenkins UI know we have the versions
+				buildName "#${BUILD_NUMBER}-#${env.SAGA_WORKBENCH_VERSION_BASE} (${env.ARTIFACT_QA})"
+			}
+		}
+		stage('Parallel stage') {
+			failFast true
+			parallel {
+				stage('clean build') {
+					steps {
+						// set image version to be used later as well
+						withDockerContainer(args: '-v $HOME/.m2:/var/maven/.m2 -v ${WORKSPACE}:/usr/src/mymaven -w /usr/src/mymaven -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven', image: env.MVN_BUILD_DOCKER_IMAGE_VERSION) {
+							sh 'mvn --batch-mode -U clean package'
+						}
+						script {
+							env.SAGA_SOLUTION_IMAGE_VERSION = env.SAGA_VERSION + "-" + env.BUILD_NUMBER
+						}
+						dir ("$WORKSPACE/docker/") {
+							// ensure we build with label, so we can clean it up again
+							sh '''
+								cp $WORKSPACE/solution/target/solution-boot.jar .
+								docker build --label "${SAGA_SOLUTION_CONTAINER_LABEL}" -t ${SAGA_SOLUTION_IMAGE_NAME}:${SAGA_SOLUTION_IMAGE_VERSION} .
+								docker images
+							'''
+						}
+					}
+				}
+				stage('Cleanup and start SAGA storage') {
+					steps {
+						echo "Ensure always to stop docker-compose stuff"
+						// We have to do two passes, as we first need to stop all containers to free endpoints from docker network
+						// compose down --volumes will fail if endpoints still attached.
+						sh '''
+							for d in `ls config-examples`;
+							do
+								cd ${WORKSPACE}/config-examples/$d
+								docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$d rm --stop -v --force
+							done
+						'''
+						sh '''
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME} rm --stop -v --force
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME} down --volumes
+						'''
+						sh 'docker ps -a && docker volume ls && docker network ls'
+						// will fail if clean up not done properly in last run
+						sh """
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME} up -d
+						"""
+					}
+				}
+			}
+		} // end of parallel stage
+		stage('Run SAGA seeds/migrations') {
+			steps {
+				dir ("$WORKSPACE/config-examples/$SEEDING_CONFIG_EXAMPLE") {
+					// can't use -v to down cmd as docker-compose return non-true
+					sh '''
+						docker build --label "${SAGA_SOLUTION_CONTAINER_LABEL}" -t "${SAGA_SOLUTION_PROBE_IMAGE_NAME}:${SAGA_SOLUTION_IMAGE_VERSION}" ./saga-probe
+						docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$SEEDING_CONFIG_EXAMPLE up --renew-anon-volumes --force-recreate --build
+						docker images
+					'''
+				}
+			}
+			post {
+				// Persist the output from our SAGA service docker-compose stack to see std out + errors and stack traces from application in the container
+				// but will only work when above steps completed.
+				always { // ensure we save docker container output log for later inspection
+					dir ("config-examples/$SEEDING_CONFIG_EXAMPLE") {
+						sh '''
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$SEEDING_CONFIG_EXAMPLE logs --no-color --timestamps --tail=all > saga-solution-container-output-from-seeding-config-example.log
+						'''
+					}
+				}
+			}
+		}
+		stage('Run and test SAGA config example') {
+			steps {
+				dir ("$WORKSPACE/config-examples/$DEFAULT_CONFIG_EXAMPLE_TO_TEST") {
+					// can't use -v to down cmd as docker-compose return non-true
+					sh '''
+						docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$DEFAULT_CONFIG_EXAMPLE_TO_TEST up --detach --renew-anon-volumes --no-color --force-recreate --build
+						docker run --network ${NETWORK:-saga-solution-network} --rm -t -v ${WORKSPACE}:/tmp ${SAGA_SOLUTION_PROBE_IMAGE_NAME}:${SAGA_SOLUTION_IMAGE_VERSION} /bin/bash /tmp/waitForSAGA.sh
+					'''
+				}
+			}
+			post {
+				// Persist the output from our SAGA service docker-compose stack to see std out + errors and stack traces from application in the container
+				// but will only work when above steps completed.
+				always { // ensure we save docker container output log for later inspection
+					dir ("config-examples/$DEFAULT_CONFIG_EXAMPLE_TO_TEST") {
+						sh '''
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$DEFAULT_CONFIG_EXAMPLE_TO_TEST logs --no-color --timestamps --tail=all > saga-solution-container-output-from-starting-config-example.log
+						'''
+					}
+				}
+			}
+		}
+		stage('Run JMeter tests') {
+			steps {
+				sh '''
+					docker run --network ${NETWORK:-saga-solution-network} -t --rm -v ${WORKSPACE}/tests/:/bzt-configs -v ${WORKSPACE}/tests/taurus/output:/tmp/artifacts blazemeter/taurus:latest taurus/SagaSolution-common-jmeterTaurus-suite.yml
+				'''
+				perfReport filterRegex: '', sourceDataFiles: 'tests/taurus/jmeter-stats.xml'
+				junit testResults: 'tests/taurus/jmeter-junit.xml'
+			}
+			post {
+				always { // ensure we save docker container output log for later inspection
+					dir ("config-examples/$DEFAULT_CONFIG_EXAMPLE_TO_TEST") {
+						sh '''
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$DEFAULT_CONFIG_EXAMPLE_TO_TEST logs --no-color --timestamps --tail=all > saga-solution-container-output-from-jmeter-taurus-tests.log
+							docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$DEFAULT_CONFIG_EXAMPLE_TO_TEST rm --stop -v --force
+						'''
+					}
+					println "Fixing files owned by root in the workspace, possible created by Taurus containers running as root"
+					sh './.ci/fix-permissions-on-files-and-dirs-owned-by-root-after-docker.sh'
+				}
+			}
+		}
+		stage('Verify other config examples start') {
+			steps {
+				// First example to fail will fail pipeline and skip further testing
+				sh '''
+					for d in $OTHER_CONFIG_EXAMPLES_TO_TEST;
+					do
+						cd ${WORKSPACE}/config-examples/$d
+						echo "$d" > ../LAST_CONFIG_EXAMPLE.txt
+						docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$d up --detach --renew-anon-volumes --no-color --force-recreate --build
+						docker run --network ${NETWORK:-saga-solution-network} --rm -t -v ${WORKSPACE}:/tmp ${SAGA_SOLUTION_PROBE_IMAGE_NAME}:${SAGA_SOLUTION_IMAGE_VERSION} /bin/bash /tmp/waitForSAGA.sh
+						docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$d logs --no-color --timestamps --tail=all > saga-solution-container-output-from-starting-config-example.log
+						docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$d rm --stop -v --force
+					done
+				'''
+			}
+			post {
+				failure {
+				// ensure we save docker container output log for later inspection in case waitForSAGA above fails getting log from last example
+				// and use the LAST_CONFIG_EXAMPLE file that have the value of last tested config-example to change dir
+					sh '''
+						cd config-examples/$(cat config-examples/LAST_CONFIG_EXAMPLE.txt)
+						docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$(cat config-examples/../LAST_CONFIG_EXAMPLE.txt) logs --no-color --timestamps --tail=all > saga-solution-container-output-from-starting-config-example.log
+					'''
+				}
+			}
+		}
+
+		stage("release") {
+			when { expression { return params.PERFORM_RELEASE } }
+			stages {
+				stage("upload to partner-portal") {
+					agent {
+						dockerfile {
+							filename '.ci/Dockerfile.ncftp-utility-for-ci'
+							label 'saga-workbench && docker && agent_version_v2' // ensures we run on build agents with these labels, though inside docker
+						}
+					}
+					steps {
+						withCredentials([usernamePassword(credentialsId: env.CI_GLOBAL_ENV_CREDENTIAL_ID_NAME_FTP_USER_PARTNER_PORTAL__V1, passwordVariable: 'FTP_PASS', usernameVariable: 'FTP_USER')]) {
+							// since we run inside another agent here, namely our ftp container we need to get the release package we "stashed" earlier
+							unstash name: 'releasepackage'
+							// FIXME risk of overwriting
+							sh 'ncftpput -R -u $FTP_USER -p $FTP_PASS $CI_GLOBAL_ENV_PARTNER_PORTAL_FQDN__V1 $CI_GLOBAL_ENV_PARTNER_PORTAL_WORKBENCH_RELEASE_PACKAGE_UPLOAD_PATH__V1 workbench-$ARTIFACT_VERSION'
+						}
+					}
+				}
+				stage("git publish") {
+					steps {
+						withCredentials([usernamePassword(credentialsId: env.CI_GLOBAL_ENV_CREDENTIAL_ID_NAME_CI_GITHUB_PERSONAL_ACCESS_TOKEN_SCOPE_REPO__V1, passwordVariable: 'GIT_PERSONAL_ACCESS_TOKEN', usernameVariable: 'GIT_USERNAME')]) {
+							sh('''
+									git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PERSONAL_ACCESS_TOKEN; }; f"
+									git status
+									git remote -v show
+									git log -n2
+									git tag -a v${ARTIFACT_VERSION} -m "Release v${ARTIFACT_VERSION}"
+									.ci/git-command-randon-failure-hack.sh git push --tags origin HEAD:$GIT_BRANCH
+								''')
+						}
+					}
+				}
+				stage("set next dev. version") {
+					steps {
+						withCredentials([usernamePassword(credentialsId: env.CI_GLOBAL_ENV_CREDENTIAL_ID_NAME_CI_GITHUB_PERSONAL_ACCESS_TOKEN_SCOPE_REPO__V1, passwordVariable: 'GIT_PERSONAL_ACCESS_TOKEN', usernameVariable: 'GIT_USERNAME')]) {
+							withDockerContainer(args: '-v $HOME/.m2:/var/maven/.m2 -v ${WORKSPACE}:/usr/src/mymaven -w /usr/src/mymaven -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven', image: env.MVN_BUILD_DOCKER_IMAGE_VERSION) {
+								// FIXME - replace develop into string is needed until we release trunk artifacts without build identifier - see
+								// https://persequor.atlassian.net/browse/DEV-487
+								// https://persequor.atlassian.net/browse/DEV-486
+								// so pom now contains - until above is fixed - e.g. <saga-version>20200717.0.0-develop-SNAPSHOT</saga-version>'
+								// instead of <saga-version>20200717.0.0-SNAPSHOT</saga-version> so below we need the following string develop
+								sh 'mvn versions:set-property -Dproperty=saga-version -DnewVersion=${NEXT_DEVELOPMENT_VERSION_NUMBER}-develop-SNAPSHOT'
+								sh('''
+									git config --local credential.helper "!f() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PERSONAL_ACCESS_TOKEN; }; f"
+									git status
+									git diff pom.xml
+									git add pom.xml
+									git commit -m "Version bump to next development cycle"
+									git status
+									git log -n2
+									.ci/git-command-randon-failure-hack.sh git push origin HEAD:$GIT_BRANCH
+								''')
+							}
+						}
+					}
+				}
+			}
+		} // end release
+	} // end stages
+
+	post {
+		unsuccessful {
+			// aborted, failure or unstable status:
+			slackSend message: "*${currentBuild.currentResult}*:<${BUILD_URL}|${JOB_NAME} #${BUILD_NUMBER}>", notifyCommitters: true
+    }
+    always {
+			// archive docker container output logs created in stages above
+			archiveArtifacts allowEmptyArchive: true, artifacts: "config-examples/*/saga-solution-container-output*.log"
+    }
+
+		cleanup {
+			println "Fixing files owned by root in the workspace, possible created by Taurus containers running as root if earlier step failed"
+			sh './.ci/fix-permissions-on-files-and-dirs-owned-by-root-after-docker.sh'
+			echo "Ensure always to stop docker-compose stuff"
+			// We have to do two passes, as we first need to stop all containers to free endpoints from docker network
+			// compose down --volumes will fail if endpoints still attached.
+			// Use ls -d to avoid listing LAST_CONFIG_EXAMPLE.txt file and remove @tmp workspace dirs from list. Remember double escape through groovy.
+			sh '''
+				cd config-examples
+				for d in `ls -d */ | cut -f1 -d'/' | grep -v "\\@tmp"`;
+				do
+					cd ${WORKSPACE}/config-examples/$d
+					docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME}-$d rm --stop -v --force
+					docker rmi ${DOCKER_COMPOSE_PROJECT_NAME}-${d}_proxy:latest || echo "Tried to remove image, but not found. Continue instead of failing."
+					${WORKSPACE}/.ci/clean-docker-image-just-built.sh -n ${DOCKER_COMPOSE_PROJECT_NAME}-$d -v latest
+				done
+			'''
+			// stop the backing services
+			sh '''
+				docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME} rm --stop -v --force
+				docker-compose --no-ansi -p ${DOCKER_COMPOSE_PROJECT_NAME} down --volumes
+			'''
+			sh './.ci/clean-docker-image-just-built.sh -n "$SAGA_SOLUTION_IMAGE_NAME" -v $SAGA_SOLUTION_IMAGE_VERSION'
+			sh './.ci/clean-docker-image-just-built.sh -n "$SAGA_SOLUTION_PROBE_IMAGE_NAME" -v $SAGA_SOLUTION_IMAGE_VERSION'
+			sh 'docker ps -a && docker volume ls && docker network ls'
+		}
+	}
+}
