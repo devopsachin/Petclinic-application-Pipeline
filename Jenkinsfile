@@ -30,7 +30,7 @@ pipeline {
 			  }
 		  }
 		  post {
-			  always{"
+			  always{
 				 junit 'spring-petclinic/target/surefire-reports/TEST-*.xml'
 
 			  }
