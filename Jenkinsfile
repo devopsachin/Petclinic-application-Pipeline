@@ -52,12 +52,12 @@ pipeline {
 	
              stage ('Deplyoing'){
 		     steps{
-			def pre_build_num = (env.$BUILD_NUMBER.toInteger()) - 1
+			//def pre_build_num = (env.$BUILD_NUMBER.toInteger()) - 1
 			sshagent (credentials: ['ssh-key']) {
 			   
    	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-		           sh 'ssh ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker stop pet-clinic-$pre_build_num'
-			   sh 'ssh ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker rm pet-clinic-$pre_build_num'
+		           //sh 'ssh ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker stop pet-clinic-$pre_build_num'
+			   //sh 'ssh ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker rm pet-clinic-$pre_build_num'
 		           sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker pull 3mmmm123/myname:$BUILD_NUMBER'
 			   sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker run -it -d --name pet-clinic-$BUILD_NUMBER -p 8080:8080 3mmmm123/myname:$BUILD_NUMBER'
                    		}
