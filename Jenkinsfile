@@ -31,7 +31,9 @@ pipeline {
 		  }
 		  post {
 			  always{
+				  dir ('spring-petclinic'){
 				  junit '**/target/surefire-reports/Test-*.xml'
+				  }
 			  }
 		  }
 	  }
