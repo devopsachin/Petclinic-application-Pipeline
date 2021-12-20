@@ -3,9 +3,7 @@ pipeline {
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
 	}
-
-  
-  stages {
+    stages {
         stage('Pulling Code form repo') {
             steps {
 		git credentialsId: 'github-creds', branch: 'main',
@@ -15,8 +13,7 @@ pipeline {
                }
             }
         } 
-  
-            stage('Building Code and testing'){
+              stage('Building Code and testing'){
                 steps{
                     dir ('spring-petclinic'){
                         sh "./mvnw package"
