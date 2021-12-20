@@ -50,7 +50,7 @@ pipeline {
                 }
             }
 	
-             stage ('Deplyoing in applicaton Server'){
+             stage ('Deplyoing'){
 		     steps{
 			sshagent (credentials: ['ssh-key']) {
 			   def pre_build_num = ($BUILD_NUMBER as int) - 1
