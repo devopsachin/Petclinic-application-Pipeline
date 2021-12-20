@@ -52,7 +52,7 @@ pipeline {
 	
              stage ('Deplyoing'){
 		     steps{
-			def pre_build_num = ($BUILD_NUMBER as int) - 1
+			def pre_build_num = (env.$BUILD_NUMBER.toInteger()) - 1
 			sshagent (credentials: ['ssh-key']) {
 			   
    	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
