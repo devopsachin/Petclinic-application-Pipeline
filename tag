@@ -4,7 +4,7 @@ pipeline{
         stages{
               stage('Build a tag'){
               when {
-                    bulidingTag()
+                    buildingTag()
                    }
                    steps{
                         echo "Building a specific tag"
