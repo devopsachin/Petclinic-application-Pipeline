@@ -1,13 +1,13 @@
 pipeline{
-	anent any 
+	agent any 
 	
 	stages{
 		stage('buil main'){
-			enviornment{
-				branch 'main'
+			when{
+				branch 'prod'
 			}
 			steps{
-				echo "Building main"
+				echo "Building prod"
 			}
 		}
 
