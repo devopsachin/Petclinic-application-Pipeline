@@ -4,7 +4,7 @@ pipeline{
       stages{
             stage ('Buliding when commit message matched'){
                 when{
-                      changelog = "*.some text.*"
+                      changelog  '*.some text.*'
                       }
                       steps{
                             echo "this ditected commit message"
