@@ -3,7 +3,7 @@ pipeline{
       
       stages{
             stage ('Buliding when commit message matched'){
-                when {
+                when{
                       changelog = '*.some text.*'
                       }
                       steps{
