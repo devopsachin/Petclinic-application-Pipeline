@@ -1,0 +1,14 @@
+pipeline{
+      agent any 
+      
+      stages{
+            stage ('Buliding when commit message matched'){
+                when {
+                      changeLog = '*some*'
+                      }
+                      steps{
+                            echo "this ditected commit message"
+                            }
+                      }
+                  }
+                }
