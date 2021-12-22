@@ -19,5 +19,5 @@ pipeline{
 			echo "build vaccine"
 		}
 	}
-}
+ }
 }
