@@ -1,0 +1,70 @@
+pipeline{
+    agent any
+    environment {
+        deploy_to = 'prod'
+        name = 'Sachin'
+        name2 = 'sachin'
+        version = '1.0'
+    }
+    stages{
+        stage ('When'){
+            when{
+                environment name: 'deploy_to', value: 'prod'
+            } 
+        steps{
+            echo "Deploying" 
+            }  
+        }
+        stage ('When Equals'){
+            when {
+                equals expected: 'Sachin', actual: name
+            }
+        steps {
+            echo "$name"
+                }
+            }
+        
+        stage ('When Not equals'){
+            when{
+                not{
+                    equals expected: 'Sachin', actual: name2   
+                }
+            }
+            steps {
+                echo "$name2 Not equals to $name"
+            }
+        }
+        stage ('When expression'){
+            when {
+                expression {
+                    version == "1.0"
+                }
+            }
+            steps{
+                echo "Matched the expression"
+            }
+        }
+        stage ('When allOf'){
+            when {
+                allOf{
+                    environment name: 'name', value: 'Sachin'
+                    environment name: 'version', value: '1.0'
+                }
+            }
+            steps{
+                echo "allOf true"
+            }
+        }
+        stage ('When anyOf'){
+            when {
+                anyOf{
+                    environment name: 'name', value: 'sachin'
+                    environment name: 'version', value: '1.0'
+                }
+            }
+            steps{
+                echo "anyOf one matched"
+            }
+        }
+    }
+}
