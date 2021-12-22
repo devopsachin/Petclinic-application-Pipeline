@@ -4,10 +4,10 @@ pipeline{
 	stages{
 		stage('buil main'){
 			enviornment{
-				branch 'main'
+				branch 'prod'
 			}
 			steps{
-				echo "Building main"
+				echo "Building prod"
 			}
 		}
 
