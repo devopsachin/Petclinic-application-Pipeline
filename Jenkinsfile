@@ -1,9 +1,9 @@
 pipeline{
-	anent any 
+	agent any 
 	
 	stages{
 		stage('buil main'){
-			enviornment{
+			when{
 				branch 'prod'
 			}
 			steps{
