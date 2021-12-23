@@ -1,0 +1,21 @@
+pipeline{
+agent none
+envoirnement {
+      deploy_to = 'acc'
+      }
+    stages{
+        stage ('Build'){
+            agent {
+                label: "Docker"
+        }
+        when{
+            beforeagent false
+            envoirnment name: 'deploy_to', value: 'acc'
+            }
+            steps{
+                echo "Building the stage "
+                }
+                }
+             }
+        }
+        
