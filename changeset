@@ -1,0 +1,13 @@
+pipeline{
+agent any 
+    stages{
+        stage('Build this if matches'){
+            when {
+                  changeset globe: "*.md"
+                  }
+                  steps{
+                      echo "Build this"
+                      }
+                      }
+                      }
+                      }
