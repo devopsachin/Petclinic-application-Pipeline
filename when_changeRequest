@@ -1,0 +1,15 @@
+pipeleine{
+agent any 
+  stages{
+    stage('Building Pull request'){
+        when {
+            changeRequest()
+            }
+            steps{
+                echo "Building Pull Request"
+                }
+                }
+        }
+        
+}
+  
