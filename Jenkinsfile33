@@ -77,7 +77,7 @@ pipeline {
 		     }
 		     post {
 		     always {
-		     echo "Application is running succsfully in this url ${ipAddress}:8080"
+		     echo "Application is running succsfully in this url '${ipAddress}:8080'"
 		     }
                   }  
     }   
