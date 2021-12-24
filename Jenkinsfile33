@@ -2,6 +2,8 @@ pipeline {
     agent any
     environment {
 		DOCKERHUB_CREDENTIALS=credentials('docker-hub')
+		//ipAddress = "ec2-13-126-91-10.ap-south-1.compute.amazonaws.com"
+		//username = "ubuntu"
 	}
     stages {
         stage('Pulling Code form repo') {
@@ -9,7 +11,7 @@ pipeline {
 		git credentialsId: 'github-creds', branch: 'main',
 		url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
                 dir ('spring-petclinic'){
-                 	sh "pwd"
+                sh "pwd"
                }
             }
         } 
@@ -49,15 +51,26 @@ pipeline {
             }
 	
              stage ('Deplyoing'){
-		     steps{
-			//def pre_build_num = (env.$BUILD_NUMBER.toInteger()) - 1
-			sshagent (credentials: ['ssh-key']) {
-			   
-   	  		   sh 'ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-		           sh 'ssh ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker stop pet-clinic || true'
-			   sh 'ssh ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker rm pet-clinic || true'
-		           sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker pull 3mmmm123/pet-clinic:$BUILD_NUMBER'
-			   sh 'ssh -v ubuntu@ec2-52-66-15-28.ap-south-1.compute.amazonaws.com sudo docker run -it -d --name pet-clinic -p 8080:8080 3mmmm123/pet-clinic:$BUILD_NUMBER'
+	     	     input {
+		     message "Please enter remote host url and username"
+		     ok "OK"
+		     submitter "sachinur94@gmail.com"
+                     submitterParameter "whoIsSubmitter"
+		     parameters{
+                    string(name: 'ipAddress', defaultValue: '0.0.0.0', description: 'Ip address to login ')
+                    string (name: 'username', defaultValue: 'admin', description: 'username to Login')
+                    
+                }
+
+	     }
+		     steps{				
+		     sshagent (credentials: ['ssh-key']) {
+
+   	  		   sh 'ssh -o StrictHostKeyChecking=no ${username}@${ipAddress} echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+		           sh 'ssh $username@$ipAddress sudo docker stop pet-clinic || true'
+			   sh 'ssh $username@$ipAddress sudo docker rm pet-clinic || true'
+		           sh 'ssh $username@$ipAddress sudo docker pull 3mmmm123/pet-clinic:$BUILD_NUMBER'
+			   sh 'ssh $username@$ipAddress sudo docker run -it -d --name pet-clinic -p 8080:8080 3mmmm123/pet-clinic:$BUILD_NUMBER'
                    		}
 		     }
                     
@@ -67,7 +80,9 @@ pipeline {
 
      post {
            failure{
-                        mail body: " App Deployment failed ${env.BUILD_URL}/console",
+                        mail body: " App Deployment \n
+				     Click here to get latest logs \n
+				     failed ${env.BUILD_URL}/console",
                         subject: "Build Failed for ${env.JOB_NAME} ",
                         to: "sachinur94@gmail.com"
                     }
