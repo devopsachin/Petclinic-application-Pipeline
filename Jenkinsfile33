@@ -5,18 +5,7 @@ pipeline {
 		//ipAddress = "ec2-13-126-91-10.ap-south-1.compute.amazonaws.com"
 		//username = "ubuntu"
 	}
-	input {
-		     message "Please enter remote host url and username"
-		     ok "OK"
-		     submitter "sachinur94@gmail.com"
-                     submitterParameter "whoIsSubmitter"
-		     parameters{
-                    string(name: 'ipAddress', defaultValue: '0.0.0.0', description: 'Ip address to login ')
-                    string (name: 'username', defaultValue: 'admin', description: 'username to Login')
-                    
-                }
-
-	     }
+	
     stages {
     
         stage('Pulling Code form repo') {
@@ -64,7 +53,18 @@ pipeline {
             }
 	
              stage ('Deplyoing'){
-	     	     
+	     	     input {
+		     message "Please enter remote host url and username"
+		     ok "OK"
+		     submitter "sachinur94@gmail.com"
+                     submitterParameter "whoIsSubmitter"
+		     parameters{
+                    string(name: 'ipAddress', defaultValue: '0.0.0.0', description: 'Ip address to login ')
+                    string (name: 'username', defaultValue: 'admin', description: 'username to Login')
+                    
+                }
+
+	     }
 		     steps{				
 		     sshagent (credentials: ['ssh-key']) {
 
@@ -75,7 +75,11 @@ pipeline {
 			   sh 'ssh $username@$ipAddress sudo docker run -it -d --name pet-clinic -p 8080:8080 3mmmm123/pet-clinic:$BUILD_NUMBER'
                    		}
 		     }
-                    
+		     post {
+		     always {
+		     echo "Application is running succsfully in this url ${ipAddress}:8080"
+		     }
+                  }  
     }   
 }
 
@@ -91,8 +95,6 @@ pipeline {
                         subject: "Build Success for ${env.JOB_NAME}",
                         to: "sachinur94@gmail.com"
                     }
-		    always {
-		     echo "Application is running succsfully in this url ${ipAddress}:8080"
-		    }
+		    
                 }
 }
