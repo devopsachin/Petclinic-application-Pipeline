@@ -1,5 +1,4 @@
-    def callMe() {
-        steps.echo("Test")
-        steps.echo("${steps.env.BRANCH_NAME}")
-        steps.sh("ls -al")
-    }
+def call (String path = 'none'){
+    sh "cd ${path}",
+    eh "./mvnw package"
+}
