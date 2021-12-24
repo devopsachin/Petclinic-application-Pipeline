@@ -89,5 +89,8 @@ pipeline {
                         subject: "Build Success for ${env.JOB_NAME}",
                         to: "sachinur94@gmail.com"
                     }
+		    always {
+		     echo "Application is running succsfully in this url ${ipAddress}:8080"
+		    }
                 }
 }
