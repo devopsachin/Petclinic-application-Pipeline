@@ -5,8 +5,7 @@ pipeline {
 		//ipAddress = "ec2-13-126-91-10.ap-south-1.compute.amazonaws.com"
 		//username = "ubuntu"
 	}
-    stages {
-    input {
+	input {
 		     message "Please enter remote host url and username"
 		     ok "OK"
 		     submitter "sachinur94@gmail.com"
@@ -18,6 +17,8 @@ pipeline {
                 }
 
 	     }
+    stages {
+    
         stage('Pulling Code form repo') {
             steps {
 		git credentialsId: 'github-creds', branch: 'main',
