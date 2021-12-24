@@ -1,4 +1,5 @@
-public class SharedLibrary {
+package vars;
+public class addBuild {
   def pipeline
   
   public SharedLibrary(pipeline) {
