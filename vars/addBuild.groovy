@@ -1,4 +1,3 @@
-package vars;
 public class addBuild {
   def pipeline
   
