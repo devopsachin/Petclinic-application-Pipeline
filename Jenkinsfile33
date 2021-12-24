@@ -6,6 +6,18 @@ pipeline {
 		//username = "ubuntu"
 	}
     stages {
+    input {
+		     message "Please enter remote host url and username"
+		     ok "OK"
+		     submitter "sachinur94@gmail.com"
+                     submitterParameter "whoIsSubmitter"
+		     parameters{
+                    string(name: 'ipAddress', defaultValue: '0.0.0.0', description: 'Ip address to login ')
+                    string (name: 'username', defaultValue: 'admin', description: 'username to Login')
+                    
+                }
+
+	     }
         stage('Pulling Code form repo') {
             steps {
 		git credentialsId: 'github-creds', branch: 'main',
@@ -51,18 +63,7 @@ pipeline {
             }
 	
              stage ('Deplyoing'){
-	     	     input {
-		     message "Please enter remote host url and username"
-		     ok "OK"
-		     submitter "sachinur94@gmail.com"
-                     submitterParameter "whoIsSubmitter"
-		     parameters{
-                    string(name: 'ipAddress', defaultValue: '0.0.0.0', description: 'Ip address to login ')
-                    string (name: 'username', defaultValue: 'admin', description: 'username to Login')
-                    
-                }
-
-	     }
+	     	     
 		     steps{				
 		     sshagent (credentials: ['ssh-key']) {
 
