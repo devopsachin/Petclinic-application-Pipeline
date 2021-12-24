@@ -1,4 +1,4 @@
 def call (String path = 'none'){
-    sh "cd ${path}",
-    sh "./mvnw package"
+    echo "cd ${path}",
+    echo "./mvnw package"
 }
