@@ -45,6 +45,14 @@ pipeline{
 
 			  }
 		  }
+		
             }
+	    stage ('Login to Docker'){
+	    	steps{
+		 script{
+		 	dockerBuild.login()
+			}
+		}
+	    }
             }
         }
