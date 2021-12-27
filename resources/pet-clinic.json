@@ -1,2 +1,4 @@
-applicationName
-commonUrl
+'{
+  "applicationName":"spring-petclinic",
+  "commonUrl": "target/surefire-reports/"
+}'
