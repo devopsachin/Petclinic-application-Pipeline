@@ -4,8 +4,8 @@ withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker
   sh """sudo docker login --username="${USERNAME}" --password="${PASSWORD}" """
   }
 }
-def build(def tag, def path){
-  sh """ sudo docker build -f ${path}/Dockerfile -t "${tag}" ."""
+def build(def path, def tag){
+  sh """ sudo docker build -f "${path}"/Dockerfile -t "${tag}" ."""
 }
 
         
