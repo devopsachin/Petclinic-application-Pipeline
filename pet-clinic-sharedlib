@@ -25,12 +25,11 @@ pipeline{
                 }
                 
             }
-            stage('Validate and Build'){
+            stage('Build'){
                 steps{
                     script{
-		       echo pwd
-		       //mvnBuild 'validate'
-                       //mvnBuild 'package'
+		       mvnBuild 'validate'
+                       mvnBuild 'package'
                     }
                 }
                 
@@ -38,32 +37,32 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-		        echo pwd
-	               // mvnBuild 'test'
-		       //sh "mkdir /var/lib/jenkins/target"
-			//sh "cp -av ${workspace}@libs/target/* /var/lib/jenkins/target/ "
+	               mvnBuild 'test'
 	                    }
                 }
             post {
 			  always{
-			  	 echo "$applicationName/$applicationPath/TEST-*.xml"
-				 sh """ cp -av target/* /var/lib/jenkins/target """
-				 //junit "$applicationPath/TEST-*.xml"
-
+				 junit "$applicationPath/TEST-*.xml"
 			  }
 		  }
 		
             }
-	    stage ('Login to Docker'){
+	    stage ('Push to Docker'){
 	    	steps{
 		 script{
-		 	//git credentialsId: 'github-creds', branch: 'main',
-                	//url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
 		 	dockerBuild.login()
 			dockerBuild.build("${workspace}@script/resources", "3mmmm123/pet-clinic:$BUILD_NUMBER")
 			dockerBuild.push ("3mmmm123/pet-clinic:$BUILD_NUMBER")
 			}
 		}
 	    }
+	    stage('Deploy'){
+	    	steps{
+			script{
+			
+			//code here
+			}
+			}
+			}
             }
         }
