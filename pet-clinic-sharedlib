@@ -9,7 +9,7 @@ pipeline{
     def props = readJSON file: 'resources/pet-clinic.json'
     applicationName = "${props.applicationName}"
     applicationPath = "${props.commonUrl}"
-    dockerPath = "${props.dockerFilePath}"
+    dockerPath = "${workspace}/${props.dockerFilePath}"
     }
     
     stages{
