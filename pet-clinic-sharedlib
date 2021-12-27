@@ -41,7 +41,7 @@ pipeline{
             post {
 			  always{
 			  	 echo "$applicationName/$applicationPath/TEST-*.xml"
-				 junit "$applicationName/$applicationPath/TEST-*.xml"
+				 junit "$applicationPath/TEST-*.xml"
 
 			  }
 		  }
