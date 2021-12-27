@@ -1,6 +1,6 @@
 {
 		"applicationName": "spring-petclinic",
 		"commonUrl": "target/surefire-reports",
-		"dockerFilePath": "/resources"
+		"dockerFilePath": "resources"
 
 }
