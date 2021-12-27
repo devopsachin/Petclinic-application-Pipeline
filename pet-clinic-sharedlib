@@ -8,7 +8,7 @@ pipeline{
     environment{ 
     def props = readJSON file: 'resources/pet-clinic.json'
     applicationName = "${props.applicationName}"
-    applicationPath = "{props.commonUrl}"
+    applicationPath = "${props.commonUrl}"
     }
     
     stages{
@@ -27,7 +27,7 @@ pipeline{
                 steps{
                     script{
                         mvnBuild 'validate'
-                        //mvnBuild 'package'
+                        mvnBuild 'package'
                     }
                 }
                 
@@ -36,16 +36,11 @@ pipeline{
                 steps{
                     script{
                         mvnBuild 'test'
-                        echo pwd
-			            echo applicationName
-			            echo applicationPath
-                    }
+	                    }
                 }
             post {
 			  always{
-			      echo pwd
-			      echo "${props.application[0]}/${props.application[1]}/TEST-*.xml"
-				 junit '${props.application[0]}/${props.application[1]}/TEST-*.xml'
+				 junit 'applicationName/applicationPath/TEST-*.xml'
 
 			  }
 		  }
