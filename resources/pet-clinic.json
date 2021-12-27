@@ -1,6 +1,8 @@
 {
 		"applicationName": "spring-petclinic",
 		"commonUrl": "target/surefire-reports",
-		"dockerFilePath": "resources"
+		"dockerFilePath": "resources",
+		"serveripAddress": "ec2-3-110-212-169.ap-south-1.compute.amazonaws.com",
+		"serveruserName": "ubuntu"
 
 }
