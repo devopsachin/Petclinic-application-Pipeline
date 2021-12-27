@@ -1,5 +1,5 @@
 {
 		"applicationName": "spring-petclinic",
-		"commonUrl": "target/surefire-reports/"
+		"commonUrl": "target/surefire-reports"
 
 }
