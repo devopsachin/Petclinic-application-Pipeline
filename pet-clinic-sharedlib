@@ -53,8 +53,8 @@ pipeline{
 	    stage ('Login to Docker'){
 	    	steps{
 		 script{
-		 	git credentialsId: 'github-creds', branch: 'main',
-                	url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
+		 	//git credentialsId: 'github-creds', branch: 'main',
+                	//url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
 		 	dockerBuild.login()
 			dockerBuild.build("$dockerPath", "3mmmm123/pet-clinic:$BUILD_NUMBER")
 			}
