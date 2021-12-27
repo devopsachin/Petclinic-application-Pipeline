@@ -6,7 +6,7 @@ import groovy.io.FileType
 pipeline{
  agent any
     environment{ 
-    def props = readJSON file: '/resources/pet-clinic.json'
+    def props = readJSON file: 'resources/pet-clinic.json'
     applicationName = "${props.applicationName}"
     applicationPath = "{props.commonUrl}"
     }
