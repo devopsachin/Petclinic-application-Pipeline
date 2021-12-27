@@ -50,7 +50,8 @@ pipeline{
 	    stage ('Login to Docker'){
 	    	steps{
 		 script{
-		 	dB.login()
+		 	dockerBuild.login()
+			dockerBuild.build(3mmmm123/pet-clinic:$BUILD_NUMBER)
 			}
 		}
 	    }
