@@ -5,7 +5,7 @@ withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker
   }
 }
 def build(String tag){
-    sh """ sudo docker build -f Dockerfile -t "${tag}" """
+    sh """ sudo docker build -f Dockerfile -t "${tag}" ."""
 }
 
         
