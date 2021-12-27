@@ -53,7 +53,7 @@ pipeline{
 	    	steps{
 		 script{
 		 	dockerBuild.login()
-			dockerBuild.build("3mmmm123/pet-clinic:$BUILD_NUMBER", "$dockerPath")
+			dockerBuild.build("$dockerPath", "3mmmm123/pet-clinic:$BUILD_NUMBER")
 			}
 		}
 	    }
