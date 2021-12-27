@@ -9,6 +9,7 @@ pipeline{
     def props = readJSON file: 'resources/pet-clinic.json'
     applicationName = "${props.applicationName}"
     applicationPath = "${props.commonUrl}"
+    dockerPath = "${props.dockerFilePath}"
     }
     
     stages{
@@ -52,7 +53,7 @@ pipeline{
 	    	steps{
 		 script{
 		 	dockerBuild.login()
-			dockerBuild.build("3mmmm123/pet-clinic:$BUILD_NUMBER", "$applicationPath")
+			dockerBuild.build("3mmmm123/pet-clinic:$BUILD_NUMBER", "$dockerPath")
 			}
 		}
 	    }
