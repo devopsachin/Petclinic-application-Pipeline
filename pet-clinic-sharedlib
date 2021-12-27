@@ -41,7 +41,7 @@ pipeline{
             post {
 			  always{
 				 //junit 'applicationName/applicationPath/TEST-*.xml'
-				 echo applicationName/applicationPath/TEST-*.xml
+				 echo "applicationName/applicationPath/TEST-*.xml"
 
 			  }
 		  }
