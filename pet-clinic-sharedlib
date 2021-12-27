@@ -40,7 +40,7 @@ pipeline{
                     script{
 		        echo pwd
 	               // mvnBuild 'test'
-			cp -av spring-petclinc /var/lib/jenkins
+			sh 'cp -av spring-petclinc /var/lib/jenkins'
 	                    }
                 }
             post {
