@@ -26,8 +26,8 @@ pipeline{
             stage('Validate and Build'){
                 steps{
                     script{
-                        mvnBuild 'validate'
-                        mvnBuild 'package'
+                      //  mvnBuild 'validate'
+                       // mvnBuild 'package'
                     }
                 }
                 
@@ -35,7 +35,7 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-                        mvnBuild 'test'
+                      //  mvnBuild 'test'
 	                    }
                 }
             post {
