@@ -28,6 +28,8 @@ pipeline{
             stage('Validate and Build'){
                 steps{
                     script{
+		       echo pwd
+		       sleep 10
                        mvnBuild 'validate'
                        mvnBuild 'package'
                     }
@@ -37,6 +39,8 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
+		        echo pwd
+			sleep 10
                         mvnBuild 'test'
 			echo "Hi"
 	                    }
