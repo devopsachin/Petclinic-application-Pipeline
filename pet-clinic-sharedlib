@@ -19,6 +19,7 @@ pipeline{
                     pullGit(
                         branch: 'main',
                         url: "https://github.com/spring-projects/spring-petclinic.git"
+			echo pwd
                         )
                     }
                 }
