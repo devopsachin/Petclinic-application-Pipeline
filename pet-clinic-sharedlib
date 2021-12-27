@@ -41,12 +41,13 @@ pipeline{
 		        echo pwd
 	               // mvnBuild 'test'
 		       //sh "mkdir /var/lib/jenkins/target"
-			sh "cp -av ${workspace}@libs/target/* /var/lib/jenkins/target/ "
+			//sh "cp -av ${workspace}@libs/target/* /var/lib/jenkins/target/ "
 	                    }
                 }
             post {
 			  always{
 			  	 echo "$applicationName/$applicationPath/TEST-*.xml"
+				 sh """ cp -av target/* /var/lib/jenkins/target """
 				 //junit "$applicationPath/TEST-*.xml"
 
 			  }
