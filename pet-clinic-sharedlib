@@ -35,7 +35,8 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-                        mvnBuild 'test'
+                        //mvnBuild 'test'
+			echo Hi
 	                    }
                 }
             post {
