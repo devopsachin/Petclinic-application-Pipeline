@@ -39,13 +39,13 @@ pipeline{
 			echo $applicationName
 			echo ${applicationName}
 	
-                        mvnBuild 'test'
+                       // mvnBuild 'test'
 	                    }
                 }
             post {
 			  always{
 				 //junit 'applicationName/applicationPath/TEST-*.xml'
-				 echo "$applicationName/$applicationPath/TEST-*.xml"
+				 junit "$applicationName/$applicationPathTEST-*.xml"
 
 			  }
 		  }
