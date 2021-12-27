@@ -1,7 +1,7 @@
 def login (){
     withCredentials(
     [
-    usernamePassword(credentialsId: 'docker-hub', 
+    usernamePasswordMultiBinding(credentialsId: 'docker-hub', 
     usernameVarriable: 'dockeruser', 
     passwordVarriable: 'dockerpassword'
     )]){
