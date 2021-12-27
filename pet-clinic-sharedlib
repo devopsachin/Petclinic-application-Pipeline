@@ -40,7 +40,7 @@ pipeline{
                     script{
 		        echo pwd
 	               // mvnBuild 'test'
-		       sh "mkdir /var/lib/jenkins/target"
+		       //sh "mkdir /var/lib/jenkins/target"
 			sh 'cp -av ${workspace}@libs/target/* /var/lib/jenkins/target/'
 	                    }
                 }
