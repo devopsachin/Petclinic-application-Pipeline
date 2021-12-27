@@ -59,6 +59,7 @@ pipeline{
                 	//url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
 		 	dockerBuild.login()
 			dockerBuild.build("${workspace}@script/resources", "3mmmm123/pet-clinic:$BUILD_NUMBER")
+			dockerBuild.push ("3mmmm123/pet-clinic:$BUILD_NUMBER")
 			}
 		}
 	    }
