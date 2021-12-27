@@ -1,0 +1,54 @@
+import groovy.json.JsonSlurperClassic
+import groovy.io.FileType
+
+@Library('pet-clinic') _
+
+pipeline{
+ agent any
+    environment{ 
+    def props = readJSON file: '${WORKSPACE}/resources/pet-clinic.json'
+    applicationName = "${props.applicationName}"
+    applicationPath = "{props.commonUrl}"
+    }
+    
+    stages{
+        stage('cloning application repo'){
+            steps{
+                script{
+                    pullGit(
+                        branch: 'main',
+                        url: "https://github.com/spring-projects/spring-petclinic.git"
+                        )
+                    }
+                }
+                
+            }
+            stage('Validate and Build'){
+                steps{
+                    script{
+                        mvnBuild 'validate'
+                        //mvnBuild 'package'
+                    }
+                }
+                
+            }
+            stage ('Test'){
+                steps{
+                    script{
+                        mvnBuild 'test'
+                        echo pwd
+			            echo applicationName
+			            echo applicationPath
+                    }
+                }
+            post {
+			  always{
+			      echo pwd
+			      echo "${props.application[0]}/${props.application[1]}/TEST-*.xml"
+				 junit '${props.application[0]}/${props.application[1]}/TEST-*.xml'
+
+			  }
+		  }
+            }
+            }
+        }
