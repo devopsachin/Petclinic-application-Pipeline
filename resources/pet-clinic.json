@@ -1,4 +1,8 @@
 {
-	"applicationName": "spring-petclinic",
-	"commonUrl": "target/surefire-reports/"
+	"application":[
+		{
+		"applicationName": "spring-petclinic",
+		"commonUrl": "target/surefire-reports/"
+		}
+		 	]
 }
