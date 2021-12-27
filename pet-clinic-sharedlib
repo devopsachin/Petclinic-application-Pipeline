@@ -9,7 +9,7 @@ pipeline{
     def props = readJSON file: 'resources/pet-clinic.json'
     applicationName = "${props.applicationName}"
     applicationPath = "${props.commonUrl}"
-    dockerPath = "${workspace}/${props.dockerFilePath}"
+    dockerPath = "${props.dockerFilePath}"
     }
     
     stages{
@@ -28,7 +28,7 @@ pipeline{
                 steps{
                     script{
                        mvnBuild 'validate'
-                      // mvnBuild 'package'
+                       mvnBuild 'package'
                     }
                 }
                 
@@ -36,14 +36,14 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-                        //mvnBuild 'test'
+                        mvnBuild 'test'
 			echo "Hi"
 	                    }
                 }
             post {
 			  always{
 			  	 echo "$applicationName/$applicationPath/TEST-*.xml"
-				 //junit "$applicationPath/TEST-*.xml"
+				 junit "$applicationPath/TEST-*.xml"
 
 			  }
 		  }
@@ -52,6 +52,8 @@ pipeline{
 	    stage ('Login to Docker'){
 	    	steps{
 		 script{
+		 	git credentialsId: 'github-creds', branch: 'main',
+                	url: 'https://github.com/devopsachin/Petclinic-application-Pipeline.git'
 		 	dockerBuild.login()
 			dockerBuild.build("$dockerPath", "3mmmm123/pet-clinic:$BUILD_NUMBER")
 			}
