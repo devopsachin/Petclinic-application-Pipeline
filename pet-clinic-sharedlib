@@ -29,9 +29,8 @@ pipeline{
                 steps{
                     script{
 		       echo pwd
-		       sleep 10
-                       mvnBuild 'validate'
-                       mvnBuild 'package'
+		       //mvnBuild 'validate'
+                       //mvnBuild 'package'
                     }
                 }
                 
@@ -40,15 +39,14 @@ pipeline{
                 steps{
                     script{
 		        echo pwd
-			sleep 10
-                        mvnBuild 'test'
+	               // mvnBuild 'test'
 			echo "Hi"
 	                    }
                 }
             post {
 			  always{
 			  	 echo "$applicationName/$applicationPath/TEST-*.xml"
-				 junit "$applicationPath/TEST-*.xml"
+				 //junit "$applicationPath/TEST-*.xml"
 
 			  }
 		  }
