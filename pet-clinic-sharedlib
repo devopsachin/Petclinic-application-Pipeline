@@ -26,8 +26,8 @@ pipeline{
             stage('Validate and Build'){
                 steps{
                     script{
-                      //  mvnBuild 'validate'
-                       mvnBuild 'package'
+                       mvnBuild 'validate'
+                      // mvnBuild 'package'
                     }
                 }
                 
@@ -35,13 +35,17 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
+		    	echo applicationName
+			echo $applicationName
+			echo ${applicationName}
+	
                         mvnBuild 'test'
 	                    }
                 }
             post {
 			  always{
 				 //junit 'applicationName/applicationPath/TEST-*.xml'
-				 echo "applicationName/applicationPath/TEST-*.xml"
+				 echo "$applicationName/$applicationPath/TEST-*.xml"
 
 			  }
 		  }
