@@ -3,7 +3,7 @@ def ssh(def username, def ipAdr){
       sh 'ssh -o StrictHostKeyChecking=no "${username}"@"${ipAdr}" '
     }
 }
-def run (){
+def run(){
     sh ' uptime'
     sh 'whoami'
 }
