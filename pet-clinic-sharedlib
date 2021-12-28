@@ -32,7 +32,7 @@ pipeline{
                 steps{
                     script{
 		       mvnBuild 'validate'
-                     //  mvnBuild 'package'
+                       mvnBuild 'package'
                     }
                 }
                 
@@ -40,14 +40,12 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-	               //mvnBuild 'test'
-		       echo "Hello "
+	               mvnBuild 'test'
 	                    }
                 }
             post {
 			  always{
-				 //junit "$applicationPath/TEST-*.xml"
-				 echo "hi"
+				 junit "$applicationPath/TEST-*.xml"
 			  }
 		  }
 		
@@ -56,8 +54,8 @@ pipeline{
 	    	steps{
 		 script{
 		 	dockerBuild.login()
-			dockerBuild.build("${workspace}@script/resources", "3mmmm123/pet-clinic:$BUILD_NUMBER")
-			dockerBuild.push ("3mmmm123/pet-clinic:$BUILD_NUMBER")
+			dockerBuild.build("${workspace}@script/resources", "$dockerRepo", "$applicationName":$BUILD_NUMBER)
+			dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
 			}
 		}
 	    }
