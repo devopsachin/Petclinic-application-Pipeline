@@ -10,7 +10,7 @@ class dockerBuild implements Serializable {
       binding: [
         this.steps.usernameColonPassword(
             credentialsId: this.credentialsId,
-            variable: "docker-hub")
+            variable: "unameColonPwd")
         ])
     {
   this.steps.sh "echo ${this.steps.env.unameColonPwd}"
