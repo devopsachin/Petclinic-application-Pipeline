@@ -10,5 +10,3 @@ class dockerBuild implements Serializable {
   //sudo docker login --username="${USERNAME}" --password="${PASSWORD}" """
   }
 }
-  
-}
