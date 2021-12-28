@@ -64,7 +64,7 @@ pipeline{
 		}
 	  	post{
 	  	     always{
-		     	sleep 5
+		     	sleep 10
 			echo " Application is running succsfully in this url http://$ipAdr:$applicationPort " 
 			}
 		}	
