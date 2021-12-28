@@ -1,6 +1,6 @@
 package org.foo
 
-class dockerBuild impliments Serializable {
+class dockerBuild implements Serializable {
   def steps
   dockerBuild(steps) {this.steps = steps}
   def login (){
