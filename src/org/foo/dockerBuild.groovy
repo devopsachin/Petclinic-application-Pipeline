@@ -12,7 +12,8 @@ class dockerBuild implements Serializable {
             credentialsId: this.credentialsId,
             variable: "docker-hub")
         ])
-  }
+    {
   this.steps.sh "echo {this.steps.env.unameColonPwd}"
   //sudo docker login --username="${USERNAME}" --password="${PASSWORD}" """
  }
+  }
