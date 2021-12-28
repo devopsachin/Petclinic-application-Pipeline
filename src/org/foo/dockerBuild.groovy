@@ -12,7 +12,7 @@ class dockerBuild implements Serializable {
             credentialsId: this.credentialsId,
             variable: "unameColonPwd")
         ]){
-  this.steps.sh """echo Hi"""
+  steps.sh """echo Hi"""
   //sudo docker login --username="${USERNAME}" --password="${PASSWORD}" """
  }
   }
