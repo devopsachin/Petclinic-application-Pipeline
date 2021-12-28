@@ -61,12 +61,12 @@ pipeline{
 			script{
 			remoteSSH.ssh("$username", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
 			}
-		}
-	  }  
+		} 
 	  post{
 	  	always{
 			echo "Application is running succsfully in this url http://${ipAdr}:"${applicationPort}""
 			}
 		}
+	}
      }
 }
