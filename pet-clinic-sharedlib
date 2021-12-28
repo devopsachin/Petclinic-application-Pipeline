@@ -20,8 +20,8 @@ pipeline{
             steps{
                 script{
                     pullGit(
-                        branch: '$branch',
-                        url: '$gitRepoUrl'
+                        branch: "$branch",
+                        url: "$gitRepoUrl"
                         )
                     }
                 }   
