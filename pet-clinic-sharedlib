@@ -20,7 +20,6 @@ pipeline{
                         branch: 'main',
                         url: "https://github.com/spring-projects/spring-petclinic.git"
                         )
-			echo pwd
                     }
                 }
                 
@@ -29,7 +28,7 @@ pipeline{
                 steps{
                     script{
 		       mvnBuild 'validate'
-                       mvnBuild 'package'
+                     //  mvnBuild 'package'
                     }
                 }
                 
@@ -37,7 +36,8 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-	               mvnBuild 'test'
+	               //mvnBuild 'test'
+		       echo Hello 
 	                    }
                 }
             post {
@@ -59,7 +59,7 @@ pipeline{
 	    stage('Deploy'){
 	    	steps{
 			script{
-			remoteSSH.ssh("ec2-13-235-243-58.ap-south-1.compute.amazonaws.com", "ubuntu")
+			remoteSSH.ssh("ubuntu", "ec2-13-235-243-58.ap-south-1.compute.amazonaws.com")
 			//code here
 			}
 			}
