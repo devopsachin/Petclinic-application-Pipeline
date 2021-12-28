@@ -6,9 +6,8 @@ class dockerBuild implements Serializable {
     this.steps = steps
   }
   def login(){
-  this.step.withCredentials(
-      binding: [
-        this.steps.usernamePassword(
+    this.step.withCredentials([
+        usernamePassword(
             credentialsId: 'docker-hub',
             usernameVariable: 'USERNAME',
             passwordVariable: 'PASSWORD')
