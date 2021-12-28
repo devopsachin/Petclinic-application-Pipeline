@@ -5,6 +5,7 @@
 		"serveripAddress": "ec2-13-235-243-58.ap-south-1.compute.amazonaws.com",
 		"serveruserName": "ubuntu",
 		"port": "8080",
-		"dockerRepoName": "3mmmm123"
-
+		"dockerRepoName": "3mmmm123",
+		"gitBranch": "main",
+		"repoUrl": "https://github.com/spring-projects/spring-petclinic.git"
 }
