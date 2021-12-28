@@ -11,6 +11,8 @@ pipeline{
     applicationPort = "${props.port}"
     username = "${props.serveruserName}"
     ipAdr = "${props.serveripAddress}"
+    branch = "${props.gitBranch}"
+    gitRepoUrl = "${props.repoUrl}"
     }
     
     stages{
@@ -18,8 +20,8 @@ pipeline{
             steps{
                 script{
                     pullGit(
-                        branch: 'main',
-                        url: "https://github.com/spring-projects/spring-petclinic.git"
+                        branch: '$branch',
+                        url: '$gitRepoUrl'
                         )
                     }
                 }   
