@@ -64,7 +64,7 @@ pipeline{
 		}
 	  	post{
 	  	     always{
-			echo Application is running succsfully in this url http://"$ipAdr":"$applicationPort" 
+			echo " Application is running succsfully in this url http://$ipAdr:$applicationPort " 
 			}
 		}	
 	  }
