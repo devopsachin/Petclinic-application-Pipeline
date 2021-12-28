@@ -2,7 +2,7 @@
 		"applicationName": "pet-clinic",
 		"commonUrl": "target/surefire-reports",
 		"dockerFilePath": "resources",
-		"serveripAddress": "ec2-13-235-243-58.ap-south-1.compute.amazonaws.com",
+		"serveripAddress": "ec2-65-1-84-119.ap-south-1.compute.amazonaws.com",
 		"serveruserName": "ubuntu",
 		"port": "8080",
 		"dockerRepoName": "3mmmm123",
