@@ -15,6 +15,6 @@ class dockerBuild implements Serializable {
   steps.sh """echo Hi"""
   //sudo docker login --username="${USERNAME}" --password="${PASSWORD}" """
  }
+    return this;
   }
-  return
 }
