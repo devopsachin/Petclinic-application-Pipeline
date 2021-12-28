@@ -1,5 +1,5 @@
 def ssh(def username, def ipAdr){
-    withCredentials([sshUserPrivateKey(credentialsId: 'ssh-key')]){
-        sh """ssh -o StrictHostKeyChecking=no "${username}"@"${ipAdr}" """
+    withCredentials([sshPrivateKey(credentialsId: 'ssh-key', keyFileVariable: 'keyfile')]){
+        sh 'ssh -o StrictHostKeyChecking=no "${username}"@"${ipAdr}" '
     }
 }
