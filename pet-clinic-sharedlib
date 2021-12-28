@@ -1,6 +1,3 @@
-import groovy.json.JsonSlurperClassic
-import groovy.io.FileType
-
 @Library('pet-clinic') _
 
 pipeline{
@@ -25,14 +22,13 @@ pipeline{
                         url: "https://github.com/spring-projects/spring-petclinic.git"
                         )
                     }
-                }
-                
+                }   
             }
             stage('Build'){
                 steps{
                     script{
 		       mvnBuild 'validate'
-                       //mvnBuild 'package'
+                       mvnBuild 'package'
                     }
                 }
                 
@@ -40,24 +36,21 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-	               //mvnBuild 'test'
-		       echo "Hi"
-	                    }
-                }
-            post {
-			  always{
-				 //junit "$applicationPath/TEST-*.xml"
-				 echo "Hi"
+	               mvnBuild 'test'
+	               }
+		}
+            	post {
+			always{
+				junit "$applicationPath/TEST-*.xml"
 			  }
 		  }
-		
             }
 	    stage ('Push to Docker'){
 	    	steps{
-		 script{
-		 	dockerBuild.login()
-			dockerBuild.build("${workspace}@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
-			dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
+		 	script{
+		 		dockerBuild.login()
+				dockerBuild.build("${workspace}@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
+				dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
 			}
 		}
 	    }
@@ -67,7 +60,6 @@ pipeline{
 			remoteSSH.ssh("$username", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
 			}
 		}
-	}
-            
-        }
+	  }          
+     }
 }
