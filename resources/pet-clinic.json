@@ -1,10 +1,9 @@
 {
-		"applicationName": "spring-petclinic",
+		"applicationName": "pet-clinic",
 		"commonUrl": "target/surefire-reports",
 		"dockerFilePath": "resources",
 		"serveripAddress": "ec2-3-110-212-169.ap-south-1.compute.amazonaws.com",
 		"serveruserName": "ubuntu",
-		"dockerAppName": "pet-clinic",
 		"port": "8080",
 		"dockerRepoName": "3mmmm123"
 
