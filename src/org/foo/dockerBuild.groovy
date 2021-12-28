@@ -9,11 +9,12 @@ class dockerBuild implements Serializable {
   this.step.withCredentials(
       binding: [
         this.steps.usernameColonPassword(
-            credentialsId: this.credentialsId,
+            credentialsId: this.docoker-hub,
             variable: "unameColonPwd")
         ]){
   steps.sh """echo Hi"""
   //sudo docker login --username="${USERNAME}" --password="${PASSWORD}" """
  }
   }
+  return
 }
