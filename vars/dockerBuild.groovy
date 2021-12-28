@@ -7,7 +7,7 @@ withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker
 def build(def path, def dockerRepoName, def applicationName){
   sh """ sudo docker build -f "${path}"/Dockerfile -t "${dockerRepoName}"/"${applicationName}" ."""
 }
-def push (def dockerRepoName, def applicationName{
+def push (def dockerRepoName, def applicationName){
   sh """ sudo docker push "${dockerRepoName}"/"${applicationName}" """
 }
         
