@@ -4,6 +4,6 @@ class Bar implements Serializable {
   Bar(steps) {this.steps = steps}
   def mvn(args) {
    // steps.sh "${steps.tool 'mvn'}/bin/mvn -o ${args}"
-    steps.sh "echo Hello!"
+    steps.sh "echo Hello! ${args}"
   }
 }
