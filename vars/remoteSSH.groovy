@@ -1,6 +1,9 @@
 def ssh(def username, def ipAdr){
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub',
+                    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
     sshagent (credentials: ['ssh-key']){
       sh """ssh -o StrictHostKeyChecking=no "${username}"@"${ipAdr}" """
-      sh """ ssh "${username}"@"${ipAdr}" echo $DOCKERHUB_CREDENTIALS_PSW | sudo docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin """
+        sh """ ssh "${username}"@"${ipAdr}" sudo docker login -u "${USERNAME}" --password="${PASSWORD}" """
     }
+}
 }
