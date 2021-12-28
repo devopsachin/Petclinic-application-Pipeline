@@ -10,6 +10,10 @@ pipeline{
     applicationName = "${props.applicationName}"
     applicationPath = "${props.commonUrl}"
     dockerPath = "${props.dockerFilePath}"
+    dockerRepo = "${props.dockerRepoName}"
+    applicationPort = "${props.port}"
+    username = "${props.serveruserName}"
+    ipAdr = "${props.serveripAddress}"
     }
     
     stages{
@@ -60,10 +64,9 @@ pipeline{
 	    stage('Deploy'){
 	    	steps{
 			script{
-			remoteSSH.ssh("ubuntu", "ec2-13-235-243-58.ap-south-1.compute.amazonaws.com")
-			//code here
+			remoteSSH.ssh("$username", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
 			}
-			}
-			}
-            }
+		}
+	}
+            
         }
