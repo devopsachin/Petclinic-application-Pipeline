@@ -1,5 +1,5 @@
-@Library('pet-clinic')
-import org.foo.*;
+@Library('pet-clinic') _
+//import org.foo.*;
 
 environment{ 
     def props = readJSON file: 'resources/pet-clinic.json'
