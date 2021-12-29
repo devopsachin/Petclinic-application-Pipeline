@@ -15,11 +15,12 @@ class Docker implements Serializable {
             throw error
         }
     }
-    def dockerBuild(path, dockerRepoName, applicationName){
+}
+/*    def dockerBuild(path, dockerRepoName, applicationName){
         this.step.sh "docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
     }
     def dockerPush(path, dockerRepoName, applicationName){
         this.steps.sh "docker push ${dockerRepoName}/${applicationName}"
     }
         
-}
+} */
