@@ -39,12 +39,14 @@ pipeline{
             stage ('Test'){
                 steps{
                     script{
-	               mvnBuild 'test'
+	               //mvnBuild 'test'
+		       echo "Hi"
 	               }
 		}
             	post {
 			always{
-				junit "$applicationPath/TEST-*.xml"
+				//junit "$applicationPath/TEST-*.xml"
+				echo "Hi"
 			  }
 		  }
             }
