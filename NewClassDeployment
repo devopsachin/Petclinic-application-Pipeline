@@ -1,7 +1,4 @@
-@Library('pet-clinic') _
-import org.foo.*;
-
-pipeline{
+{
     agent any
     environment{
         def props = readJSON file: 'resources/pet-clinic.json'
@@ -11,7 +8,7 @@ pipeline{
         dockerPath = "${props.dockerFilePath}"
         dockerRepo = "${props.dockerRepoName}"
         applicationName = "${props.applicationName}"
-        username = "${props.serveruserName}"
+        Serverusername = "${props.serveruserName}"
         ipAdr = "${props.serveripAddress}"
         applicationPort = "${props.port}"
 
@@ -31,21 +28,19 @@ pipeline{
             steps{
                 script{
                     mvnBuild 'validate'
-                    //mvnBuild 'package'
+                    mvnBuild 'package'
                 }
             }
         }
         stage('Test'){
             steps{
                 script{
-                    //mvnBuild 'test'
-                    echo "Hi"
+                    mvnBuild 'test'
                 }
             }
             post{
                 always{
-                    //junit "$applicationPath/TEST-*.xml"
-                    echo "Hi"
+                    junit "$applicationPath/TEST-*.xml"
                 }
             }
         }
@@ -54,18 +49,23 @@ pipeline{
                 script{
                     def x = new B(this)
                     x.dockerLogin 'docker-hub'
-                   // x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
-                   // x.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                    x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                    x.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                 }
             }
         }
         stage('echo'){
             steps{
                 script{
-                    echo "Hello world"
+                    remoteSSH.ssh("$Serverusername", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
                 }
             }
-                
+            post {
+                always{
+		     	sleep 10
+			    echo " Application is running succsfully in this url http://$ipAdr:$applicationPort " 
+			    }
+            }   
             }
         }
         
