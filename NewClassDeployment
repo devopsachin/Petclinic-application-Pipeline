@@ -49,9 +49,9 @@ pipeline{
             }
         }
         stage('Push to docker'){
+            import org.foo.*;
             steps{
                 script{
-                    import org.foo.*;
                     def x = new B(this)
                     x.dockerLogin 'docker-hub'
                     x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
