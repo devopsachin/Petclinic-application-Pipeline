@@ -1,4 +1,4 @@
-import org.foo
+package org.foo
 class shell implements  Serializable{
   def steps
   shell (steps){
