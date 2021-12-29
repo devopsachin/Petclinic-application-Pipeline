@@ -1,5 +1,5 @@
 @Library('pet-clinic') _
-
+import org.foo.*;
 pipeline{
     agent any
     environment{
@@ -49,7 +49,6 @@ pipeline{
             }
         }
         stage('Push to docker'){
-            import org.foo.*;
             steps{
                 script{
                     def x = new B(this)
