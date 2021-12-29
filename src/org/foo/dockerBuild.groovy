@@ -11,10 +11,7 @@ class dockerBuild implements Serializable {
                                                               
         this.steps.sh "sudo docker login --username '${usernameVariable}' --password "
         }
-      }catch (error){
-            this.steps.echo error.getMessage()
-            throw error
-        }
+      }
         steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
         steps.sh "sudo docker push ${dockerRepoName}/${applicationName} "
       }
