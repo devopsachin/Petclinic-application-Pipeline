@@ -14,7 +14,6 @@ class U implements Serializable {
            this.steps.echo error.getMessage()
            throw error
      }
-return new U();
     }
 
 
