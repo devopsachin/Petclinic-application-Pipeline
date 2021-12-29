@@ -5,7 +5,7 @@ class dockerBuild implements Serializable {
   dockerBuild(steps) {
     this.steps = steps
   }
-  def login(String credentials, path, dockerRepoName, applicationName){
+  def login(String credentials){
     try{
       this.steps.withCredentials([steps.usernameColonPassword(credentialsId: credentials, variable: 'docker-hub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD', )]){
     steps.sh "sudo docker login --username $USERNAME --password $PASSWORD"
@@ -18,3 +18,4 @@ class dockerBuild implements Serializable {
         steps.sh "sudo docker push ${dockerRepoName}/${applicationName} "
       }
 }
+//, path, dockerRepoName, applicationName
