@@ -54,7 +54,6 @@ pipeline{
                     x.dockerLogin 'docker-hub'
                     x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                     x.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
-                    return this;
                 }
             }
         }
