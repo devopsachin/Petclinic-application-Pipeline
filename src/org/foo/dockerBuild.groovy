@@ -9,6 +9,7 @@ class dockerBuild implements Serializable {
     
     steps.sh "sudo docker login"
     steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
+    steps.sh "sudo docker push ${dockerRepoName}/${applicationName} "
  }
   }
 //}
