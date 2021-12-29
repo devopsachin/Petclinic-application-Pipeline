@@ -20,6 +20,14 @@ pipeline{
                 }
             }
         }
+        stage('Build'){
+            steps{
+                script{
+                    mvnBuild 'validate'
+                    mvnBuild 'package'
+                }
+            }
+        }
         stage('Docker Login'){
             steps{
                 script{
@@ -31,3 +39,4 @@ pipeline{
         
     }
 }
+
