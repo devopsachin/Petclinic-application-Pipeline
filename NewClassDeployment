@@ -1,9 +1,10 @@
 @Library('pet-clinic') _
 import org.foo.*;
-def x = new B(this)
+
 pipeline{
     agent any
     environment{
+        def x = new B(this)
         def props = readJSON file: 'resources/pet-clinic.json'
         branch = "${props.gitBranch}"
         gitRepoUrl = "${props.repoUrl}"
