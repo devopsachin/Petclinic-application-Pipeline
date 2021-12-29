@@ -4,7 +4,6 @@ import org.foo.*;
 pipeline{
     agent any
     environment{
-        def x = new B(this)
         def props = readJSON file: 'resources/pet-clinic.json'
         branch = "${props.gitBranch}"
         gitRepoUrl = "${props.repoUrl}"
@@ -53,6 +52,7 @@ pipeline{
         stage('Push to docker'){
             steps{
                 script{
+                    def x = new B(this)
                     x.dockerLogin 'docker-hub'
                    // x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                    // x.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
