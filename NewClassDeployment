@@ -1,5 +1,6 @@
 @Library('pet-clinic') _
 import org.foo.*;
+def x = new B(this)
 pipeline{
     agent any
     environment{
@@ -51,7 +52,6 @@ pipeline{
         stage('Push to docker'){
             steps{
                 script{
-                    def x = new B(this)
                     x.dockerLogin 'docker-hub'
                     x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                     x.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
