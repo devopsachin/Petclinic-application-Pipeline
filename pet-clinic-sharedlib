@@ -31,7 +31,7 @@ pipeline{
                 steps{
                     script{
 		       mvnBuild 'validate'
-                       mvnBuild 'package'
+                       //mvnBuild 'package'
                     }
                 }
                 
