@@ -1,25 +1,33 @@
 @Library('pet-clinic') _
-//import org.foo.*;
-
-
+import org.foo.*;
 
 pipeline{
-    agent any 
-    environment{ 
-    def props = readJSON file: 'resources/pet-clinic.json'
-    gitRepoUrl = "${props.repoUrl}"
-    branch = "${props.gitBranch}"
- }
+    agent any
+    environment{
+        def props = readJSON file: 'resources/pet-clinic.json'
+        branch = "${props.gitBranch}"
+        gitRepoUrl = "${props.repoUrl}"
+
+    }
     stages{
-    stage('Checkout SCM'){
-                steps{
-                       script{
-                               pullGit(
-                                    branch: "$branch",
-                                    url: "$gitRepoUrl"
-                        )
-                        }
-                    }
+        stage('Chekout SCM'){
+            steps{
+                script{
+                    pullGit(
+                        branch: "$branch",
+                        url: "$gitRepoUrl"
+                    )
                 }
+            }
+        }
+        stage('Docker Login'){
+            steps{
+                script{
+                    def x = new B(this)
+                    x.dockerLogin 'docker-hub'
+                }
+            }
+        }
+        
     }
-    }
+}
