@@ -15,7 +15,7 @@ class U implements Serializable {
            throw error
      }
     }
-}
+
    def dockerBuild(path, dockerRepoName, applicationName){
         this.step.sh "docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
     }
