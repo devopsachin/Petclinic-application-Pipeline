@@ -4,16 +4,16 @@ class U implements Serializable {
         this.steps = steps
     }
     def dockerLogin(String credentials){
-      //  try {
+      try {
             this.steps.withCredentials([steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) 
             {
                 this.steps.sh "sudo docker login -u " + '${usernameVariable}' + " --password " + '${PASSWORD}' + " "
             }
-     //   } 
-     //   catch (error){
-       //     this.steps.echo error.getMessage()
-      //      throw error
-//        }
+     } 
+       catch (error){
+           this.steps.echo error.getMessage()
+           throw error
+     }
     }
 }
 /*    def dockerBuild(path, dockerRepoName, applicationName){
