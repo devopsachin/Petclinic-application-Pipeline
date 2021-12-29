@@ -1,6 +1,6 @@
-class utils implements Serializable {
+class Utilities implements Serializable {
     def steps
-    utils(steps) {
+    Utilities(steps) {
         this.steps = steps
     }
     def doArchiveToNexus(String credentials, String artifact, String artifact_registry_path){
