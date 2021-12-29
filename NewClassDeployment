@@ -11,9 +11,7 @@ pipeline{
         dockerPath = "${props.dockerFilePath}"
         dockerRepo = "${props.dockerRepoName}"
         applicationName = "${props.applicationName}"
-        username = "${props.serveruserName}"
-        ipAdr = "${props.serveripAddress}"
-        applicationPort = "${props.port}"
+        
 
     }
     stages{
