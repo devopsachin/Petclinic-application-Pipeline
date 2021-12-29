@@ -1,11 +1,10 @@
 package org.foo
-class exe implements  Serializable{
+class shell implements Serializable {
   def steps
-  exe (steps){
-    this.steps = steps
-  }
-  def script(){
-    steps.sh "sudo docker login --user username --password password"
+  shell(steps) {this.steps = steps}
+  def mvn(args) {
+   // steps.sh "${steps.tool 'mvn'}/bin/mvn -o ${args}"
+    steps.sh "docker login --username ${args}"
   }
 }
-return exe
+
