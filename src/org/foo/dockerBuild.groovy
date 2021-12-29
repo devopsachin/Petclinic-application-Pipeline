@@ -6,7 +6,6 @@ class dockerBuild implements Serializable {
     this.steps = steps
   }
   def login(path, dockerRepoName, applicationName){
-    
     steps.sh "sudo docker login"
     steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
     steps.sh "sudo docker push ${dockerRepoName}/${applicationName} "
