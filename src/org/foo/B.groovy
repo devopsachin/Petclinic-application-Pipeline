@@ -17,7 +17,7 @@ class U implements Serializable {
     }
 
    def dockerBuild(path, dockerRepoName, applicationName){
-        this.step.sh "docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
+        this.steps.sh "docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
     }
     def dockerPush(path, dockerRepoName, applicationName){
         this.steps.sh "docker push ${dockerRepoName}/${applicationName}"
