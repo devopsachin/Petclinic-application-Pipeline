@@ -9,6 +9,16 @@ public class SharedLibrary {
   }
   
   public void startBuild() {
-    pipeline.steps.sh "echo 'Hello, World!'"
+    try{
+      this.steps.withCredentials([steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) 
+            {
+          pipeline.steps.sh "sudo docker login -u " + '${USERNAME}' + " --password " + '${PASSWORD}' + " "
+            }
+      } 
+       catch (error){
+           this.steps.echo error.getMessage()
+           throw error
+     }
+    }
+
   }
-}
