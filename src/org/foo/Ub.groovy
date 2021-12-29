@@ -6,7 +6,7 @@ class U implements Serializable {
     def doArchiveToNexus(String credentials){
         try {
             this.steps.withCredentials([steps.usernameColonPassword(credentialsId: credentials, variable: 'JENKINS_USER')]) {
-                this.steps.sh "sudo docker login --username " + '${JENKINS_USER}' + " --password mydocker2021"
+                this.steps.sh "sudo docker login --username " + '${JENKINS_USER}' + " --password "mydocker2021" "
             }
         } catch (error){
             this.steps.echo error.getMessage()
