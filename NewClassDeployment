@@ -11,6 +11,9 @@ pipeline{
         dockerPath = "${props.dockerFilePath}"
         dockerRepo = "${props.dockerRepoName}"
         applicationName = "${props.applicationName}"
+        username = "${props.serveruserName}"
+        ipAdr = "${props.serveripAddress}"
+        applicationPort = "${props.port}"
 
     }
     stages{
@@ -51,6 +54,13 @@ pipeline{
                     x.dockerLogin 'docker-hub'
                     x.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                     x.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                }
+            }
+        }
+        stage('Deploy'){
+            steps{
+                script{
+                    remoteSSH.ssh("$username", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
                 }
             }
         }
