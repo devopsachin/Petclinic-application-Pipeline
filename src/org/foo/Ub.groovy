@@ -3,10 +3,10 @@ class U implements Serializable {
     U(steps) {
         this.steps = steps
     }
-    def doArchiveToNexus(String credentials, String artifact, String artifact_registry_path){
+    def doArchiveToNexus(String credentials){
         try {
             this.steps.withCredentials([steps.usernameColonPassword(credentialsId: credentials, variable: 'JENKINS_USER')]) {
-                this.steps.sh "curl --user " + '${JENKINS_USER}' + " --upload-file ${artifact} ${artifact_registry_path}"
+                this.steps.sh "sudo docker login --user '${JENKINS_USER}'"
             }
         } catch (error){
             this.steps.echo error.getMessage()
