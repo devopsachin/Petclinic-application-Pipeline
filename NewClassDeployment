@@ -1,14 +1,15 @@
 @Library('pet-clinic') _
 //import org.foo.*;
 
-environment{ 
+
+
+pipeline{
+    agent any 
+    environment{ 
     def props = readJSON file: 'resources/pet-clinic.json'
     gitRepoUrl = "${props.repoUrl}"
     branch = "${props.gitBranch}"
  }
-
-pipeline{
-    agent any 
     stages{
     stage('Checkout SCM'){
                 steps{
