@@ -7,7 +7,7 @@ stages{
     stage('Login'){
       steps{
           script{
-              def exe = new Ub(this)
+              def exe = new B(this)
                exe.dockerLogin 'docker-hub'
                
                }
