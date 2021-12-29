@@ -14,8 +14,9 @@ class U implements Serializable {
            this.steps.echo error.getMessage()
            throw error
      }
+        return dockerLogin;
     }
-    return this;
+
 
    def dockerBuild(path, dockerRepoName, applicationName){
         this.steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
