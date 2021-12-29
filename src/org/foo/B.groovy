@@ -22,5 +22,5 @@ class U implements Serializable {
     def dockerPush(dockerRepoName, applicationName){
       this.steps.sh "sudo docker push ${dockerRepoName}/${applicationName}"
     }
-     return steps   
+     return steps ; 
 } 
