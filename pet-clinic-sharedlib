@@ -54,7 +54,7 @@ pipeline{
 				def exe = new dockerBuild(this)
                 		exe.login '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
 		 		//dockerBuild.login()
-				//dockerBuild.build("${workspace}@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
+				//dockerBuild.build("${workspace}.trim()@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
 				//dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
 			}
 		}
