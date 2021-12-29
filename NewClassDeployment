@@ -8,6 +8,9 @@ pipeline{
         branch = "${props.gitBranch}"
         gitRepoUrl = "${props.repoUrl}"
         applicationPath = "${props.commonUrl}"
+        dockerPath = "${props.dockerFilePath}"
+        dockerRepo = "${props.dockerRepoName}"
+        applicationName = "${props.applicationName}"
 
     }
     stages{
@@ -41,11 +44,12 @@ pipeline{
                 }
             }
         }
-        stage('Docker Login'){
+        stage('Push to docker'){
             steps{
                 script{
                     def x = new B(this)
                     x.dockerLogin 'docker-hub'
+                    x.dockerdockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                 }
             }
         }
