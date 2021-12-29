@@ -7,7 +7,7 @@ class dockerBuild implements Serializable {
   }
   def login(String credentials){
     try{
-      this.steps.withCredentials([steps.usernameColonPassword(credentialsId: credentials, variable: 'usernameVariable, passwordVariable' )]){
+      this.steps.withCredentials([steps.usernameColonPassword(credentialsId: credentials, variable: 'usernameVariable', variable: 'passwordVariable' )]){
                                                               
         steps.sh "sudo docker login --username '${usernameVariable}' --password '${passwordVariable}'"
         }
