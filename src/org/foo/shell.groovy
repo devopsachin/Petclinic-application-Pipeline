@@ -1,11 +1,11 @@
 package org.foo
-class shell implements  Serializable{
+class exe implements  Serializable{
   def steps
-  shell (steps){
+  exe (steps){
     this.steps = steps
   }
   def script(){
     steps.sh "sudo docker login --user username --password password"
   }
 }
-return shell
+return exe
