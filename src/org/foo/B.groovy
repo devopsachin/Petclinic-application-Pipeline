@@ -15,7 +15,7 @@ class U implements Serializable {
            throw error
      }
     }
-    return String
+    return this;
 
    def dockerBuild(path, dockerRepoName, applicationName){
         this.steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
