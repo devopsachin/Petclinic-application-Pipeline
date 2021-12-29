@@ -1,0 +1,16 @@
+@Library('pet-clinic')
+import org.foo.*;
+
+pipeline{
+    agent any 
+    stages{
+          stage('Docker Login'){
+                steps{
+                      script{
+                             def exe = new B(this)
+                             exe.dockerLogin 'docker-hub' 
+                             }
+                     }
+         }
+    }
+}
