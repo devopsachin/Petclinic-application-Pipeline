@@ -19,9 +19,8 @@ class U implements Serializable {
    def dockerBuild(path, dockerRepoName, applicationName){
         this.steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
     }
-    def dockerEcho(path, dockerRepoName, applicationName){
-        this.steps.sh "echo ${dockerRepoName}/${applicationName} "
-      //  this.steps.sh "sudo docker push ${dockerRepoName}/${applicationName}"
+    def dockerPush(dockerRepoName, applicationName){
+      this.steps.sh "sudo docker push ${dockerRepoName}/${applicationName}"
     }
         
 } 
