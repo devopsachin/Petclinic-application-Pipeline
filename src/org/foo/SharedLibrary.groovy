@@ -9,9 +9,9 @@ public class SharedLibrary {
   }
   
   public void startBuild() {
-      pipeline.withCredentials([pipeline.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) 
+      pipeline.steps.withCredentials([pipeline.steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) 
             {
-          pipeline.sh "sudo docker login -u " + '${USERNAME}' + " --password " + '${PASSWORD}' + " "
+          pipeline.steps.sh "sudo docker login -u " + '${USERNAME}' + " --password " + '${PASSWORD}' + " "
             }
     }
 
