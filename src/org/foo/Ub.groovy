@@ -1,6 +1,6 @@
-class Docker implements Serializable {
+class U implements Serializable {
     def steps
-    Docker(steps) {
+    U(steps) {
         this.steps = steps
     }
     def dockerLogin(String credentials){
