@@ -14,7 +14,7 @@ class U implements Serializable {
            this.steps.echo error.getMessage()
            throw error
      }
-
+        return "U";
     }
 
 
@@ -24,6 +24,6 @@ class U implements Serializable {
     def dockerPush(dockerRepoName, applicationName){
       this.steps.sh "sudo docker push ${dockerRepoName}/${applicationName}"
     }
-        return "U";
+
 } 
  
