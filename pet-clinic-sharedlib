@@ -54,8 +54,8 @@ pipeline{
 				sh "docker logout"
 				def exe = new Ub(this)
                 		exe.dockerLogin 'docker-hub'
-				exe.dockerBuild '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
-				exe.dockerPush '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+				//exe.dockerBuild '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+				//exe.dockerPush '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
 		 		//dockerBuild.login()
 				//dockerBuild.build("${workspace}.trim()@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
 				//dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
