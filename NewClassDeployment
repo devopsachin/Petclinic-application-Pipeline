@@ -7,6 +7,7 @@ pipeline{
         def props = readJSON file: 'resources/pet-clinic.json'
         branch = "${props.gitBranch}"
         gitRepoUrl = "${props.repoUrl}"
+        applicationPath = "${props.commonUrl}"
 
     }
     stages{
@@ -25,6 +26,18 @@ pipeline{
                 script{
                     mvnBuild 'validate'
                     mvnBuild 'package'
+                }
+            }
+        }
+        stage('Test'){
+            steps{
+                script{
+                    mvnBuild 'test'
+                }
+            }
+            post{
+                always{
+                    junit "$applicationPath/TEST-*.xml"
                 }
             }
         }
