@@ -1,6 +1,12 @@
 @Library('pet-clinic')
 import org.foo.*;
 
+environment{ 
+    def props = readJSON file: 'resources/pet-clinic.json'
+    gitRepoUrl = "${props.repoUrl}"
+    branch = "${props.gitBranch}"
+ }
+
 pipeline{
     agent any 
     stages{
@@ -12,5 +18,15 @@ pipeline{
                              }
                      }
          }
+         stage('Checkout SCM'){
+                steps{
+                       script{
+                               pullGit(
+                                    branch: "$branch",
+                                    url: "$gitRepoUrl"
+                        )
+                        }
+                    }
+                }
     }
 }
