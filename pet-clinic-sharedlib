@@ -51,8 +51,10 @@ pipeline{
 	    stage ('Push to Docker'){
 	    	steps{
 		 	script{
-				def exe = new dockerBuild(this)
-                		exe.login '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+				def exe = new Ub(this)
+                		exe.dockerLogin 'docker-hub'
+				exe.dockerBuild '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+				exe.dockerPush '${WORKSPACE}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
 		 		//dockerBuild.login()
 				//dockerBuild.build("${workspace}.trim()@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
 				//dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
