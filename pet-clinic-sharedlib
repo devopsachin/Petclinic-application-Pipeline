@@ -52,7 +52,7 @@ pipeline{
 	    	steps{
 		 	script{
 				def exe = new dockerBuild(this)
-                		exe.login '${workspace}@script/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                		exe.login '${workspace@script}/resources' , '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
 		 		//dockerBuild.login()
 				//dockerBuild.build("${workspace}@script/resources", "$dockerRepo", "$applicationName:$BUILD_NUMBER")
 				//dockerBuild.push ("$dockerRepo", "$applicationName:$BUILD_NUMBER")
