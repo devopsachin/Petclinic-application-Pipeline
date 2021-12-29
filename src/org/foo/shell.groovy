@@ -6,6 +6,6 @@ class shell implements  Serializable{
   }
   def script(){
     steps.sh "sudo docker login --user username --password password"
-    return this
   }
 }
+return shell
