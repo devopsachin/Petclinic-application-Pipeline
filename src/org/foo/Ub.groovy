@@ -7,7 +7,7 @@ class Docker implements Serializable {
         try {
             this.steps.withCredentials([steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) 
             {
-                this.steps.sh "docker login --username " + '${USERNAME}' + " --password " + '${PASSWORD}' + " "
+                this.steps.sh "sudo docker login --username " + '${USERNAME}' + " --password " + '${PASSWORD}' + " "
             }
         } 
         catch (error){
