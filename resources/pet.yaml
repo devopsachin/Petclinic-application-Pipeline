@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: pet-clinic-deployment
+  labels: 
+    app: pet-clinic
+
+spec: 
+ replicas: 1
+ selector:
+   matchLabels:
+     app: redis
+
+ template: 
+   metadata:
+     labels:
+       app: pet-clinic
+
+
+   spec: 
+     containers: 
+     - name: pet-clinic
+       image: 3mmmmm123/pet-clinic:115
+       ports:
+       - containerPort: 8080
+
+     
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: pet-service
+spec: 
+ selector: 
+   app: pet-clinic
+ ports: 
+ - protocol: TCP
+   port: 8080
+   targetPort: 8080
