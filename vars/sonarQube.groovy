@@ -4,6 +4,6 @@ def test(def projectkey){
     sh "${scannerHome}/bin/sonar-scanner \
     -Dsonar.projectKey=${projectkey} \
         -Dsonar.working.directory= \
-      -Dsonar.exclusions=vendor/**,resources/**,**/*.java " 
+      -Dsonar.exclusions=vendor/**,resources/**,**/*.java,.scannerwork/** " 
  }
 }
