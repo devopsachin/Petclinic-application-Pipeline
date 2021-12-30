@@ -40,15 +40,15 @@ pipeline{
 	stage('Build'){
             steps{
                 script{
-                   // mvnBuild 'validate'
-                    mvnBuild 'package'
+                    mvnBuild 'clean validate'
+                    mvnBuild 'clean package'
                 }
             }
         }
         stage('Test'){
             steps{
                 script{
-                    mvnBuild 'test'
+                    mvnBuild 'clean test'
                 }
             }
             post{
