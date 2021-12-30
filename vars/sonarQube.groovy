@@ -3,7 +3,7 @@ def test(def projectkey){
     withSonarQubeEnv('sonarqube'){
     sh "${scannerHome}/bin/sonar-scanner \
     -Dsonar.projectKey=${projectkey} \
-        -Dsonar.working.directory=${WORKSPACE} \
+        -Dsonar.working.directory= \
       -Dsonar.exclusions=vendor/**,resources/**,**/*.java " 
  }
 }
