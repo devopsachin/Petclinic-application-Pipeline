@@ -14,6 +14,7 @@ pipeline{
         Serverusername = "${props.serveruserName}"
         ipAdr = "${props.serveripAddress}"
         applicationPort = "${props.port}"
+	project-key = "${props.sonarQubeProjectKey}"
 
     }
     stages{
@@ -27,7 +28,15 @@ pipeline{
                 }
             }
         }
-        stage('Build'){
+	stage{
+           steps{
+	      script{
+	      	  sonarQube "$project-key"
+		  }
+	     }
+	}
+		  
+	stage('Build'){
             steps{
                 script{
                     mvnBuild 'validate'
