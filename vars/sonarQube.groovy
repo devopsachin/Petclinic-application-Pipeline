@@ -4,7 +4,7 @@ def test(def projectkey){
     sh "${scannerHome}/bin/sonar-scanner \
     -Dsonar.projectKey=${projectkey} \
     -Dsonar.buildbreaker.skip=true \
-        -Dsonar.scanner.metadataFilePath=${WORKDIR}/sonarQube \
+        -Dsonar.scanner.metadataFilePath=${WORKSPACE}/sonarQube \
          -Dsonar.exclusions=vendor/**,resources/**,**/*.java " 
  }
 }
