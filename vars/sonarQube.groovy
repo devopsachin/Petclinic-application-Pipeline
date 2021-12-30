@@ -7,4 +7,5 @@ def test(def projectkey){
         -Dsonar.analysis.mode= \
       -Dsonar.exclusions=vendor/**,resources/**,**/*.java,.scannerwork/** " 
  }
+ sh "sudo rm -rf ${WORSPACE}/.scannerwork"
 }
