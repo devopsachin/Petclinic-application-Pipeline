@@ -31,6 +31,7 @@ pipeline{
 	stage('Sonar Qube quelity check'){
            steps{
 	      script{
+	      	  echo "${projectkey}"
 	      	  sonarQube.test("$projectkey")
 		  }
 	     }
