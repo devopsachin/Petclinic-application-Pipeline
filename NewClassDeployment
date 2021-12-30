@@ -40,8 +40,8 @@ pipeline{
 	stage('Build'){
             steps{
                 script{
-                    mvnBuild 'clean validate'
-                    mvnBuild 'clean package'
+                    mvnBuild 'clean validate sonar:sonar'
+                    //mvnBuild 'clean package sonar:sonar'
                 }
             }
         }
