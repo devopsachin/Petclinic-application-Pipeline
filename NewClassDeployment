@@ -14,7 +14,7 @@ pipeline{
         Serverusername = "${props.serveruserName}"
         ipAdr = "${props.serveripAddress}"
         applicationPort = "${props.port}"
-	project-key = "${props.sonarQubeProjectKey}"
+	projectkey = "${props.sonarQubeProjectKey}"
 
     }
     stages{
@@ -31,7 +31,7 @@ pipeline{
 	stage{
            steps{
 	      script{
-	      	  sonarQube "$project-key"
+	      	  sonarQube "$projectkey"
 		  }
 	     }
 	}
