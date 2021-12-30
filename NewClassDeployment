@@ -31,7 +31,6 @@ pipeline{
 	stage('Sonar Qube quelity check'){
            steps{
 	      script{
-	      	  echo "${projectkey}"
 	      	  sonarQube.test("$projectkey")
 		  }
 	     }
@@ -40,15 +39,15 @@ pipeline{
 	stage('Build'){
             steps{
                 script{
-                    mvnBuild 'clean validate'
-                    mvnBuild 'clean package'
+                    mvnBuild 'validate'
+                    mvnBuild 'package'
                 }
             }
         }
         stage('Test'){
             steps{
                 script{
-                    mvnBuild 'clean test'
+                    mvnBuild 'test'
                 }
             }
             post{
