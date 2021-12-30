@@ -8,4 +8,5 @@
 		"dockerRepoName": "3mmmm123",
 		"gitBranch": "main",
 		"repoUrl": "https://github.com/spring-projects/spring-petclinic.git"
+		"sonarQubeProjectKey": "pet-clinic"
 }
