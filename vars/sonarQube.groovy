@@ -1,4 +1,4 @@
-def test(String project-key){
+def test(String projectkey){
     def scanerhome = tool 'sonarqube'
     withSonarQubeEnv('sonarqube')
     sh "${scannerHome}/bin/sonar-scanner \
