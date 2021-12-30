@@ -40,8 +40,8 @@ pipeline{
 	stage('Build'){
             steps{
                 script{
-                    mvnBuild 'clean validate sonar:sonar -Dmaven.wagon.http.ssl.insecure=true'
-                    //mvnBuild 'clean package sonar:sonar'
+                    mvnBuild 'clean validate'
+                    //mvnBuild 'clean package'
                 }
             }
         }
