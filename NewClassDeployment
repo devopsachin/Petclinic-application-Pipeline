@@ -41,7 +41,7 @@ pipeline{
             steps{
                 script{
                     mvnBuild 'clean validate'
-                    //mvnBuild 'clean package'
+                    mvnBuild 'clean package'
                 }
             }
         }
