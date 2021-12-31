@@ -86,11 +86,22 @@ pipeline{
                 }
             }
             post {
+	    when{
+		environment name: 'DeployTo', value: 'Docker'
+		}
                 always{
 		     	sleep 10
 			    echo " Application is running succsfully in this url http://$ipAdr:$applicationPort " 
 			    }
-            }   
+            } 
+		post {
+		 when {
+		    	environment name: 'DeployTo', value: 'Kubernetes'
+		}
+		always{
+			sleep 10
+			echo " Application is running succsfully in this url http://$ipAdr:30601"
+			}
             }
         }
         
