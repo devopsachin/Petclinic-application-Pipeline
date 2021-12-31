@@ -1,11 +1,11 @@
-class Utility implements Serializable {
+class Utility implements Serializable {     /* Library class  Serializable=this is interface     */
     def steps
     Utility(steps) {
         this.steps = steps
     }
-    def dockerLogin(String credentials){
+    def dockerLogin(String credentials){     /* Method */
       try {
-            this.steps.withCredentials([steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )]) 
+            this.steps.withCredentials([steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )])   /* super class */
             {
                 this.steps.sh "sudo docker login -u " + '${USERNAME}' + " --password " + '${PASSWORD}' + " "
             }
