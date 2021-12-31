@@ -3,7 +3,7 @@ class Utility implements Serializable {     /* Library class  Serializable=this 
     Utility(steps) {
         this.steps = steps
     }
-    def dockerLogin(String credentials){     /* Method */
+    def dockerLogin(String credentials){     /* dockerLogin is a Method */
       try {
             this.steps.withCredentials([steps.usernamePassword(credentialsId: credentials, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD' )])   /* super class */
             {
