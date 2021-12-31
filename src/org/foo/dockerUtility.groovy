@@ -1,4 +1,4 @@
-class Utility implements Serializable {     /* Library class  Serializable=this is interface     */
+class Utility implements Serializable {     /* Library class  Serializable=this is interface    (The process of writing the state of an object to a file is called) */
     def steps
     Utility(steps) {
         this.steps = steps
