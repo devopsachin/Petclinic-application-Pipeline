@@ -1,3 +1,3 @@
-def call (String command){
+def call (String command){  //this is function 
         sh "mvn ${command} "
       }
