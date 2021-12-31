@@ -20,9 +20,9 @@ def kubessh(def username, def ipAdr, def applicationName, def dockerRepo, def ap
         sh """ ssh "${username}"@"${ipAdr}" sudo docker stop "${applicationName}" || true """
         sh """ ssh "${username}"@"${ipAdr}" sudo docker rm "${applicationName}" || true """
         sh """ ssh "${username}"@"${ipAdr}" sudo docker pull "${dockerRepo}"/"${applicationName}":$BUILD_NUMBER """
-        sh """ scp "${WORKSPACE}@script/resources/pet.yaml" "${username}"@"${ipAdr}":/tmp """
-        sh """ ssh "${username}"@"${ipAdr}" sudo kubectl delete -f /tmp/pet.yaml || true """
-        sh """ ssh "${username}"@"${ipAdr}" sudo kubectl apply -f /tmp/pet.yaml || true """
+        sh """ scp "${WORKSPACE}@script/resources/pet-deployment.yaml" "${username}"@"${ipAdr}":/tmp """
+        sh """ ssh "${username}"@"${ipAdr}" sudo kubectl delete -f /tmp/pet-deployment.yaml || true """
+        sh """ ssh "${username}"@"${ipAdr}" sudo kubectl apply -f /tmp/pet-deployment.yaml || true """
    }
 }
 }
