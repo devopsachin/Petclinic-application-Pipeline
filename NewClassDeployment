@@ -75,6 +75,12 @@ pipeline{
 			otherRemote.dockerssh("$Serverusername", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
 			}
 		}
+		post {
+	        always{
+		     	sleep 10
+			    echo " Application is running succsfully in this url http://$ipAdr:$applicationPort " 
+		}
+            } 
 	}
         stage('Deploying to Kubernetes'){
 	  when {
@@ -84,25 +90,14 @@ pipeline{
                 script{
                     otherRemote.kubessh("$Serverusername", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
                 }
-            }
-            post {
-	    when{
-		environment name: 'DeployTo', value: 'Docker'
-		}
-                always{
-		     	sleep 10
-			    echo " Application is running succsfully in this url http://$ipAdr:$applicationPort " 
-			    }
-            } 
 		post {
-		 when {
-		    	environment name: 'DeployTo', value: 'Kubernetes'
-		}
 		always{
 			sleep 10
 			echo " Application is running succsfully in this url http://$ipAdr:30601"
-			}
+			     }
+                }
             }
-        }
+            
+	}
     }
 }
