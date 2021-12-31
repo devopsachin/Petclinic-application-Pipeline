@@ -1,5 +1,5 @@
-@Library('pet-clinic') _
-import org.foo.*;
+@Library('pet-clinic') _   /*Shared Library  */
+import org.foo.*;	   /* annoation */
 
 pipeline{
     agent any
