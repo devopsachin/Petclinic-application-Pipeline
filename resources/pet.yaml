@@ -21,6 +21,7 @@ spec:
      containers: 
      - name: pet-clinic
        image: 3mmmmm123/pet-clinic:115
+       imagePullPolicy: IfNotPresent
        ports:
        - containerPort: 8080
 
