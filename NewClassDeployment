@@ -40,7 +40,7 @@ pipeline{
             steps{
                 script{
                     mvnBuild 'validate'
-                  //  mvnBuild 'package'
+                    mvnBuild 'jetty:run'
                 }
             }
         }
