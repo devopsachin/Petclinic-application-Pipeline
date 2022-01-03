@@ -5,7 +5,7 @@ class pet implements Serializable {
     this.pipeline = pipeline 
   }
   def HelloWorld(args){
-    pipeline.sh "Hello World "$args""
+    pipeline.sh "Hello World ${args}"
   }
 }
   
