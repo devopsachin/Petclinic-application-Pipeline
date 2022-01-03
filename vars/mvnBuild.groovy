@@ -1,3 +1,3 @@
 def call (args){  //this is function 
-        sh "mvn ${args} "
+        sh "sudo mvn ${args} "
       }
