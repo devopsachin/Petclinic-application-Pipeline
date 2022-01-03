@@ -90,14 +90,13 @@ pipeline{
                 script{
                     otherRemote.kubessh("$Serverusername", "$ipAdr", "$applicationName", "$dockerRepo", "$applicationPort" )
                 }
-		post {
+            }
+		        post {
 		always{
 			sleep 10
 			echo " Application is running succsfully in this url http://$ipAdr:30601"
 			     }
-                }
             }
-            
-	}
+    	}
     }
 }
