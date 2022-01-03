@@ -1,7 +1,7 @@
 class Utility implements Serializable {     /* Library class  Serializable=this is interface    (The process of writing the state of an object to a file is called) */
     def steps                               /* OBJECT */
     Utility(steps) {
-        this.steps = steps   /* This keyword is used to refer current object instance */
+        this.steps = steps                  /* This keyword is used to refer current object instance */
     }
     def dockerLogin(String credentials){     /* dockerLogin is a Method */
       try {
