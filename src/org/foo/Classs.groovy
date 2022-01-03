@@ -1,4 +1,4 @@
-Class pet implements Serializable {
+class pet implements Serializable {
   def pipeline
   
   pet(pipeline){
