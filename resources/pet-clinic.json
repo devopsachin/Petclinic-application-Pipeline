@@ -7,6 +7,6 @@
 		"port": "8080",
 		"dockerRepoName": "3mmmm123",
 		"gitBranch": "main",
-		"repoUrl": "https://github.com/spring-projects/spring-petclinic.git",
+		"repoUrl": "https://github.com/spring-projects/spring-mvc-showcase.git",
 		"sonarQubeProjectKey": "pet-clinic"
 }
