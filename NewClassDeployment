@@ -53,7 +53,8 @@ pipeline{
             }
             post{
                 always{
-                    junit "$applicationPath/TEST-*.xml"
+                    ..junit "$applicationPath/TEST-*.xml"
+		    echo "okay"
                 }
             }
         }
