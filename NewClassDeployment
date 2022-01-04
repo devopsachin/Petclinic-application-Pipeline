@@ -6,7 +6,7 @@ pipeline{
     environment{
         def props = readJSON file: 'resources/pet-clinic.json'
         branch = "${props.gitBranch}"
-        gitRepoUrl = "${props.repoUrl}"
+        gitRepoUrl = "${props.TomcatAppRepoUrl}"
         applicationPath = "${props.commonUrl}"
         dockerPath = "${props.dockerFilePath}"
         dockerRepo = "${props.dockerRepoName}"
