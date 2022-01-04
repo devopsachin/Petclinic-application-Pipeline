@@ -10,7 +10,7 @@ class dockerBuild implements Serializable {
         steps.echo "'${usernameVariable}'"
                                                               
         this.steps.sh "sudo docker login --username '${usernameVariable}' --password "
-        steps.sh "sudo docker build -f ${path}/Dockerfile -t ${dockerRepoName}/${applicationName} ."
+        steps.sh "sudo docker build -f ${path}/tomcatDockerfile -t ${dockerRepoName}/${applicationName} ."
         steps.sh "sudo docker push ${dockerRepoName}/${applicationName} "
       }
 }
