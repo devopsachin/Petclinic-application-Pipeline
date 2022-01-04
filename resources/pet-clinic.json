@@ -6,7 +6,7 @@
 		"serveruserName": "ubuntu",
 		"port": "8080",
 		"dockerRepoName": "3mmmm123",
-		"gitBranch": "main",
+		"gitBranch": "master",
 		"repoUrl": "https://github.com/kliakos/sparkjava-war-example.git",
 		"sonarQubeProjectKey": "pet-clinic"
 }
