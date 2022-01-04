@@ -39,10 +39,9 @@ pipeline{
 	stage('Build'){
             steps{
                 script{
-                  //  mvnBuild 'validate'
-		  dir('sparkjava-war-example'){
+                   mvnBuild 'validate'
                     mvnBuild 'package'
-		    }
+
                 }
             }
         }
