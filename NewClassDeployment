@@ -40,7 +40,9 @@ pipeline{
             steps{
                 script{
                   //  mvnBuild 'validate'
+		  dir('sparkjava-war-example'){
                     mvnBuild 'package'
+		    }
                 }
             }
         }
