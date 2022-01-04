@@ -7,7 +7,7 @@ def dockerssh(def username, def ipAdr, def applicationName, def dockerRepo, def 
         sh """ ssh "${username}"@"${ipAdr}" sudo docker stop "${applicationName}" || true """
         sh """ ssh "${username}"@"${ipAdr}" sudo docker rm "${applicationName}" || true """
         sh """ ssh "${username}"@"${ipAdr}" sudo docker pull "${dockerRepo}"/"${applicationName}":$BUILD_NUMBER """
-        sh """ ssh "${username}"@"${ipAdr}" sudo docker run -it -d --name "${applicationName}" -p "${applicationPort}":"${applicationPort}" "${dockerRepo}"/"${applicationName}":$BUILD_NUMBER """
+        sh """ ssh "${username}"@"${ipAdr}" sudo docker run -it -d --name "${applicationName}" -p 8888:"${applicationPort}" "${dockerRepo}"/"${applicationName}":$BUILD_NUMBER """
     }
 }
 }
