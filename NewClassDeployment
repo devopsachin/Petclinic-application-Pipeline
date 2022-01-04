@@ -59,13 +59,41 @@ pipeline{
             }
         }
         stage('Push'){
+            when{
+               environment name: 'DeployTo', value: 'Docker'
+            }
+            }
             steps{
                 script{
                     def execute = new dockerUtility(this)
                     execute.dockerLogin 'docker-hub'
-                    execute.dockerBuild '${WORKSPACE}@script/$dockerPath', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                    execute.dockerBuild '${WORKSPACE}@script/$dockerPath/$petDockerfile', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                     execute.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                 }
+            }
+            when {
+                environment name: 'DeployTo', value: 'Kuberentes'
+            }
+            steps{
+                script{
+                   def execute = new dockerUtility(this)
+                    execute.dockerLogin 'docker-hub'
+                    execute.dockerBuild '${WORKSPACE}@script/$dockerPath/$petDockerFile', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                    execute.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER' 
+                }
+            }
+            when {
+                environment name: 'DeployTo', value: 'Tomcat'
+            }
+            steps{
+                script{
+                   def execute = new dockerUtility(this)
+                    execute.dockerLogin 'docker-hub'
+                    execute.dockerBuild '${WORKSPACE}@script/$dockerPath/$TomcatDockerfileName', '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                    execute.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER' 
+                }
+            }
+            }
             }
         }
 	stage('Deploying to Docker'){
@@ -100,5 +128,20 @@ pipeline{
 			     }
             }
     	}
+    	stage('Deploy to Tomcat'){
+    	    when{
+    	        environment name: 'DeployTo', value: 'Tomcat'
+    	    }
+    	    steps{
+    	        script{
+    	            otherRemote.tomcatssh("$Serverusername", "$ipAdr", "$TomcatapplicationName", "$dockerRepo", "$TomcatapplicationPort" )
+    	        }
+    	    }
+    	    post{
+    	        alwasy{
+    	            echo "Application can be accesed in this url http://$Serverusername:$TomcatapplicationPort/$TomcatapplicationName/hello"
+    	        }
+    	    }
+    	    }
+    	}
     }
-}
