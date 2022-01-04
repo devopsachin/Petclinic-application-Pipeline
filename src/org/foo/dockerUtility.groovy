@@ -12,7 +12,7 @@ class Utility implements Serializable {     /* Library class  Serializable=this 
 
 
    def dockerBuild(path, dockerRepoName, applicationName){                          /* dockerBuild is other method inside class utility */
-        this.steps.sh "sudo docker build -f ${path}/tomcatDockerfileDockerfile -t ${dockerRepoName}/${applicationName} ."
+        this.steps.sh "sudo docker build -f ${path}/tomcatDockerfile -t ${dockerRepoName}/${applicationName} ."
     }
     def dockerPush(dockerRepoName, applicationName){                                /* dockerPush is other metod inside class utility */
       this.steps.sh "sudo docker push ${dockerRepoName}/${applicationName}"
