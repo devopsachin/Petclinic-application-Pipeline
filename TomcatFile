@@ -67,7 +67,8 @@ pipeline{
         stage('Junit Result'){
             steps{
                 script{
-                    junit "$applicationPath/TEST-*.xml"
+                  //  junit "$applicationPath/TEST-*.xml"
+		  echo "hi"
                 }
             }
         }
