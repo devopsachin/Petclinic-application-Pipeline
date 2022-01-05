@@ -8,7 +8,7 @@
 		"dockerRepoName": "3mmmm123",
 		"TomgitBranch": "master",
 		"TomrepoUrl": "https://github.com/kliakos/sparkjava-war-example.git",
-		"PetrepoUrl": "https://github.com/spring-projects/spring-petclinic.git"
+		"PetrepoUrl": "https://github.com/spring-projects/spring-petclinic.git",
 		"sonarQubeProjectKey": "pet-clinic",
 		"TomcatapplicationPort": "8888",
 		"TomcatapplicationName": "sparkjava-war-example",
