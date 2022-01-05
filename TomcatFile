@@ -1,0 +1,35 @@
+@Library('pet-clinic') _
+import org.foo.*
+
+pipeline{
+    agent any
+    envoirnment {
+        def props = readJSON file: 'resources/pet-clinic.json'
+        Tombranch = "${props.TomgitBranch}"
+        tomcatgitRepoUrl = "${props.TomrepoUrl}"
+        petgitrepoUrl = "${props.PetrepoUrl}"
+        applicationPath = "${props.commonUrl}"
+        dockerPath = "${props.dockerFilePath}"
+        dockerRepo = "${props.dockerRepoName}"
+        applicationName = "${props.applicationName}"
+        Serverusername = "${props.serveruserName}"
+        ipAdr = "${props.serveripAddress}"
+        applicationPort = "${props.port}"
+	    projectkey = "${props.sonarQubeProjectKey}"
+    }
+    stages{
+        stage('Checkout SCM'){
+           when {
+               equals expected: 'Tomcat', actual: DeployTo
+           }
+           steps{
+               script{
+                   pullGit(
+                        branch: "$Tombranch",
+                        url: "$tomcatgitRepoUrl"
+                    )
+               }
+           }
+           } 
+        }
+    }
