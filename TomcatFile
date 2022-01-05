@@ -78,7 +78,7 @@ pipeline{
                     if (env.DeployTo == 'Tomcat'){
                         def tomcat = new dockerUtility(this)
                         tomcat.dockerLogin 'docker-hub'
-                        tomcat.dockerBuild '${WORKSPACE}@script/$dockerPath/$TomcatDockerfileName', '$dockerRepo' , '$TomcatapplicationName:$BUILD_NUMBER'
+                        tomcat.dockerBuild '${WORKSPACE}@script/$dockerPath', '$TomcatDockerfileName', '$dockerRepo' , '$TomcatapplicationName:$BUILD_NUMBER'
                         tomcat.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
                     }else if (env.DeployTo == 'Docker'){
                         def docker = new dockerUtility(this)
