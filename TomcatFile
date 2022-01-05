@@ -20,32 +20,22 @@ pipeline{
     }
     stages{
         stage('Checkout SCM'){
-           when {
-               equals expected: 'Tomcat', actual: DeployTo
-           }
            steps{
                script{
+                   if  (env.DeployTo == 'Tomcat'){
                    pullGit(
                         branch: "$Tombranch",
                         url: "$tomcatgitRepoUrl"
                     )
-               }
-           }
-           }
-           stage('Checkout SCM'){
-               when {
-                   not{
-                       equals expected: 'Tomcat', actual: DeployTo
-                   }
-               }
-               steps{
-                   script{
-                       pullGit(
+               }else {
+                pullGit(
                            branch: "$PetBranch",
                            url: "$petgitrepoUrl"
-                        )
-                   }
+                        )   
                }
            }
+           }
+           
         }
     }
+}
