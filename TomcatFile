@@ -3,7 +3,7 @@ import org.foo.*
 
 pipeline{
     agent any
-    envoirnment {
+    environment {
         def props = readJSON file: 'resources/pet-clinic.json'
         Tombranch = "${props.TomgitBranch}"
         tomcatgitRepoUrl = "${props.TomrepoUrl}"
