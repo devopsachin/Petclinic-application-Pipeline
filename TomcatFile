@@ -12,11 +12,15 @@ pipeline{
         applicationPath = "${props.commonUrl}"
         dockerPath = "${props.dockerFilePath}"
         dockerRepo = "${props.dockerRepoName}"
-        applicationName = "${props.applicationName}"
+        TomcatapplicationName = "${props.TomapplicationName}"
+        DockerapplicationName = "${props.applicationName}"
         Serverusername = "${props.serveruserName}"
         ipAdr = "${props.serveripAddress}"
         applicationPort = "${props.port}"
 	    projectkey = "${props.sonarQubeProjectKey}"
+	    TomcatDockerfileName = "${props.TomcatDockerfileName}"
+	    DockerfileName = "${props.DockerFilename}"
+	    
     }
     stages{
         stage('Checkout SCM'){
@@ -36,6 +40,58 @@ pipeline{
            }
            }
            
+        }
+        stage ('SonarQube Test'){
+            steps{
+                script{
+                 sonarQube.test("$projectkey")
+
+                }
+            }
+        }
+        stage('Build'){
+            steps{
+                script{
+                    mvnBuild 'validate'
+                    mvnBuild 'package'
+                }
+            }
+        }
+        stage('Test'){
+            steps{
+                script{
+                    mvnBuild 'test'
+                }
+            }
+        }
+        stage('Junit Result'){
+            steps{
+                script{
+                    junit "$applicationPath/TEST-*.xml"
+                }
+            }
+        }
+        stage('Push'){
+            steps{
+                script{
+                    if (env.DeployTo == 'Tomcat'){
+                        def tomcat = new dockerUtility(this)
+                        tomcat.dockerLogin 'docker-hub'
+                        tomcat.dockerBuild '${WORKSPACE}@script/$dockerPath/$TomcatDockerfileName', '$dockerRepo' , '$TomcatapplicationName:$BUILD_NUMBER'
+                        tomcat.dockerPush '$dockerRepo' , '$applicationName:$BUILD_NUMBER'
+                    }else if (env.DeployTo == 'Docker'){
+                        def docker = new dockerUtility(this)
+                        docker.dockerLogin 'docker-hub'
+                        docker.dockerBuild '${WORKSPACE}@script/$dockerPath/$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
+                        docker.dockerPush '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
+                    }else {
+                        def kub = new dockerUtility(this)
+                        kub.dockerLogin 'docker-hub'
+                        kub.dockerBuild '${WORKSPACE}@script/$dockerPath/$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
+                        kub.dockerPush  '$dockerRepo', '$DockerapplicationName:$BUILD_NUMBER' 
+                    }
+                }
+            }
         }
     }
 }
