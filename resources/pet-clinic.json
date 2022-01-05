@@ -13,5 +13,6 @@
 		"sonarQubeProjectKey": "pet-clinic",
 		"TomcatapplicationPort": "8888",
 		"TomcatapplicationName": "sparkjava-war-example",
-		"TomcatDockerfileName": "tomcatDockerfile" 
+		"TomcatDockerfileName": "tomcatDockerfile",
+		"DockerFilename": "Dockerfile"
 }
