@@ -6,6 +6,7 @@ pipeline{
     environment {
         def props = readJSON file: 'resources/pet-clinic.json'
         Tombranch = "${props.TomgitBranch}"
+        PetBranch = "${props.PetgitBranch}"
         tomcatgitRepoUrl = "${props.TomrepoUrl}"
         petgitrepoUrl = "${props.PetrepoUrl}"
         applicationPath = "${props.commonUrl}"
@@ -30,6 +31,21 @@ pipeline{
                     )
                }
            }
-           } 
+           }
+           stage('Checkout SCM'){
+               when {
+                   not{
+                       equals expected: 'Tomcat', actual: DeployTo
+                   }
+               }
+               steps{
+                   script{
+                       pullGit(
+                           branch: "$PetBranch",
+                           url: "$petgitrepoUrl"
+                        )
+                   }
+               }
+           }
         }
     }
