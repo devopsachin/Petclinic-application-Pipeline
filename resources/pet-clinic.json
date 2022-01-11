@@ -12,7 +12,7 @@
 		"PetrepoUrl": "https://github.com/spring-projects/spring-petclinic.git",
 		"sonarQubeProjectKey": "pet-clinic",
 		"TomcatapplicationPort": "8888",
-		"TomcatapplicationName": "sparkjava-war-example",
+		"TomapplicationName": "sparkjava-war-example",
 		"TomcatDockerfileName": "tomcatDockerfile",
 		"DockerFilename": "Dockerfile"
 }
