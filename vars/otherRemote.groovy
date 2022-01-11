@@ -38,7 +38,7 @@ def tomcatssh(def username, def ipAdr, def TomcatapplicationName, def dockerRepo
         sh """ ssh "${username}"@"${ipAdr}" sudo docker stop "${TomcatapplicationName}" || true """
         sh """ ssh "${username}"@"${ipAdr}" sudo docker rm "${TomcatapplicationName}" || true """
         sh """ ssh "${username}"@"${ipAdr}" sudo docker pull "${dockerRepo}"/"${TomcatapplicationName}":$BUILD_NUMBER """
-        sh """ ssh "${username}"@"${ipAdr}" sudo docker run -it -d --name "${TomcatapplicationName}" -p "${TomcatapplicationPort}":"${TomcatapplicationPort}" "${dockerRepo}"/"${TomcatapplicationName}":$BUILD_NUMBER """
+        sh """ ssh "${username}"@"${ipAdr}" sudo docker run -it -d --name "${TomcatapplicationName}" -p "${TomcatapplicationPort}":8080 "${dockerRepo}"/"${TomcatapplicationName}":$BUILD_NUMBER """
     }
    }
 }
