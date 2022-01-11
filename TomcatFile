@@ -16,7 +16,8 @@ pipeline{
         DockerapplicationName = "${props.applicationName}"
         Serverusername = "${props.serveruserName}"
         ipAdr = "${props.serveripAddress}"
-        applicationPort = "${props.port}"
+        DockerapplicationPort = "${props.port}"
+        TomcatAppPort = "${props.TomcatapplicationPort}"
 	    projectkey = "${props.sonarQubeProjectKey}"
 	    TomcatDockerfileName = "${props.TomcatDockerfileName}"
 	    DockerfileName = "${props.DockerFilename}"
@@ -90,6 +91,19 @@ pipeline{
                         kub.dockerLogin 'docker-hub'
                         kub.dockerBuild '${WORKSPACE}@script/$dockerPath/$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
                         kub.dockerPush  '$dockerRepo', '$DockerapplicationName:$BUILD_NUMBER' 
+                    }
+                }
+            }
+        }
+        stage('Deploy'){
+            steps{
+                script{
+                    if (env.DeployTo == 'Tomcat'){
+                        otherRemote.tomcatssh("$Serverusername", "$ipAdr", "$TomcatapplicationName", "$dockerRepo", "$TomcatAppPort")
+                    }else if (env.DeployTo == 'Docker'){
+                       otherRemote.dockerssh("$Serverusername", "$ipAdr", "$DockerapplicationName", "$dockerRepo", "$DockerapplicationPort") 
+                    }else {
+                        otherRemote.kubessh ("$Serverusername", "$ipAdr", "$DockerapplicationName", "$dockerRepo", "$DockerapplicationPort")
                     }
                 }
             }
