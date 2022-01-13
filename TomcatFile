@@ -7,7 +7,7 @@ properties([
             description: 'Select the Env Name from the Dropdown List', 
             filterLength: 1, 
             filterable: false, 
-            name: 'Env', 
+            name: 'DeployTo', 
             randomName: 'choice-parameter-5631314439613978', 
             script: [
                 $class: 'GroovyScript', 
@@ -29,10 +29,10 @@ properties([
             choiceType: 'PT_SINGLE_SELECT', 
             description: 'Select the Server from the Dropdown List', 
             filterLength: 1, 
-            filterable: true, 
-            name: 'Server', 
+            filterable: false, 
+            name: 'Application', 
             randomName: 'choice-parameter-5631314456178619', 
-            referencedParameters: 'Env', 
+            referencedParameters: 'DeployTo', 
             script: [
                 $class: 'GroovyScript', 
                 fallbackScript: [
