@@ -39,7 +39,14 @@ properties([
                     classpath: [], 
                     sandbox: false, 
                     script: 
-                        'return[\'Could not get Environment from Env Param\']'
+                        '''
+			if(DeployTo.equals("Tomcat")){
+				return ["helloworld-sparkjava-war"]
+				}
+				else {
+			     return ["Spring-pet-clinic"]
+			}
+			'''
                 ], 
                 script: [
                     classpath: [], 
