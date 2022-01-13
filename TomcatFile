@@ -6,7 +6,7 @@ properties([
             choiceType: 'PT_SINGLE_SELECT', 
             description: 'Select the Env Name from the Dropdown List', 
             filterLength: 1, 
-            filterable: true, 
+            filterable: false, 
             name: 'Env', 
             randomName: 'choice-parameter-5631314439613978', 
             script: [
@@ -21,7 +21,7 @@ properties([
                     classpath: [], 
                     sandbox: false, 
                     script: 
-                        'return["Dev","QA","Stage","Prod"]'
+                        'return["Tomcat","Docker","Kubernetes"]'
                 ]
             ]
         ], 
