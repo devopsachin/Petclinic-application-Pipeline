@@ -46,11 +46,11 @@ properties([
                     sandbox: false, 
                     script: 
                         '''if(DeployTo.equals("Tomcat")){
-				return ["helloworld-sparkjava-war"]
-				}
-				else {
-			     return ["Spring-pet-clinic"]
-			}
+return ["helloworld-sparkjava-war"]
+}
+else {
+return ["Spring-pet-clinic"]
+}
                         '''
                 ]
             ]
