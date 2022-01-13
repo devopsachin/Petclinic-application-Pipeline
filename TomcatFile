@@ -39,7 +39,7 @@ properties([
                     classpath: [], 
                     sandbox: false, 
                     script: 
-                        'return ['value can be selected']'
+                        'return [\'value can be selected\']'
                 ], 
                 script: [
                     classpath: [], 
