@@ -39,20 +39,13 @@ properties([
                     classpath: [], 
                     sandbox: false, 
                     script: 
-                        '''
-			if(DeployTo.equals("Tomcat")){
-				return ["helloworld-sparkjava-war"]
-				}
-				else {
-			     return ["Spring-pet-clinic"]
-			}
-			'''
+                        'return ['value can be selected']'
                 ], 
                 script: [
                     classpath: [], 
                     sandbox: false, 
                     script: 
-                        ''' if(DeployTo.equals("Tomcat")){
+                        '''if(DeployTo.equals("Tomcat")){
 				return ["helloworld-sparkjava-war"]
 				}
 				else {
