@@ -140,12 +140,12 @@ pipeline{
                     }else if (env.DeployTo == 'Docker'){
                         def docker = new dockerUtility(this)
                         docker.dockerLogin 'docker-hub'
-                        docker.dockerBuild '${WORKSPACE}@script/$dockerPath/$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
+                        docker.dockerBuild '${WORKSPACE}@script/$dockerPath', '$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
                         docker.dockerPush '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
                     }else {
                         def kub = new dockerUtility(this)
                         kub.dockerLogin 'docker-hub'
-                        kub.dockerBuild '${WORKSPACE}@script/$dockerPath/$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
+                        kub.dockerBuild '${WORKSPACE}@script/$dockerPath', '$DockerfileName', '$dockerRepo' , '$DockerapplicationName:$BUILD_NUMBER'
                         kub.dockerPush  '$dockerRepo', '$DockerapplicationName:$BUILD_NUMBER' 
                     }
                 }
